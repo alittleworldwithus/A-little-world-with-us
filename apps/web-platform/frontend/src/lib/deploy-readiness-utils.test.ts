@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { spawnSync } from 'node:child_process'
+import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { isCronAuthMatrixValid, isDriveOrphanAccessMatrixValid, isSafeStagingUrl, isScopedB2ObjectName } from '../../../../../scripts/deploy-readiness-utils'
 
@@ -26,7 +27,6 @@ describe('deploy readiness smoke-test helpers', () => {
 
   it('keeps the preflight shell script syntactically valid', () => {
     const script = resolve(process.cwd(), '../../../scripts/preflight-deploy.sh')
-    const { existsSync } = require('node:fs')
     if (!existsSync(script)) return
     const result = spawnSync('bash', ['-n', script], { encoding: 'utf8' })
     expect(result.status, result.stderr).toBe(0)

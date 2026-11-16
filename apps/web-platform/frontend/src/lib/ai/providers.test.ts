@@ -81,8 +81,6 @@ describe('AI provider fallback boundaries', () => {
     })
     expect(fetchWithTimeout).not.toHaveBeenCalled()
   })
-})
-
   it('tries the explicitly selected provider first even if the allowlist is differently ordered', async () => {
     fetchWithTimeout.mockResolvedValueOnce(new Response(JSON.stringify({
       choices: [{ message: { content: 'Preferred Groq response' } }],
@@ -98,3 +96,5 @@ describe('AI provider fallback boundaries', () => {
     expect(fetchWithTimeout).toHaveBeenCalledTimes(1)
     expect(fetchWithTimeout.mock.calls[0]?.[0]).toBe('https://api.groq.com/openai/v1/chat/completions')
   })
+
+})

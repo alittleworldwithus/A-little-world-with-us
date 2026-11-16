@@ -86,6 +86,32 @@ export async function sendTelegramMessage(
   }
 }
 
+export async function answerTelegramCallbackQuery(callbackQueryId: string): Promise<boolean> {
+  const { token, enabled } = getTelegramConfig()
+  if (!token || !enabled || !callbackQueryId.trim()) return false
+
+  try {
+    const response = await fetch(`${TELEGRAM_API_BASE}/bot${token}/answerCallbackQuery`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ callback_query_id: callbackQueryId }),
+    })
+    const result = await response.json().catch(() => null) as { ok?: boolean; error_code?: number } | null
+    if (!response.ok || result?.ok !== true) {
+      console.error('[Telegram:OurWorld] callback acknowledgement failed', {
+        httpStatus: response.status,
+        telegramErrorCode: result?.error_code ?? null,
+      })
+      return false
+    }
+    return true
+  } catch {
+    // Do not log the exception object: fetch errors can include the bot-token URL.
+    console.error('[Telegram:OurWorld] callback acknowledgement failed before receiving a response.')
+    return false
+  }
+}
+
 export async function sendTelegramNotification(payload: TelegramNotificationPayload): Promise<unknown | null> {
   const iconMap: Record<string, string> = {
     SUCCESS: '💖',

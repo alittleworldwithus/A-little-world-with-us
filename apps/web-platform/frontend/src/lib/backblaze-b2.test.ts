@@ -3,8 +3,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createHmac } from 'node:crypto'
 
 vi.mock('server-only', () => ({}))
-import type { verifyB2Upload as VerifyB2Upload } from './backblaze-b2'
+import type { verifyB2Upload as VerifyB2Upload, getB2DownloadUrl as GetB2DownloadUrl } from './backblaze-b2'
 let verifyB2Upload: typeof VerifyB2Upload
+let getB2DownloadUrl: typeof GetB2DownloadUrl
 
 const secret = 'test-only-signing-secret'
 const objectName = 'couples/couple-1/large-media/user-1/file.mp4'
@@ -22,7 +23,7 @@ function signatureFor(value: typeof input) {
 describe('verifyB2Upload signed object scope', () => {
   beforeEach(async () => {
     vi.resetModules()
-    ;({ verifyB2Upload } = await import('./backblaze-b2'))
+    ;({ verifyB2Upload, getB2DownloadUrl } = await import('./backblaze-b2'))
     vi.stubEnv('B2_APPLICATION_KEY_ID', 'test-key-id')
     vi.stubEnv('B2_APPLICATION_KEY', 'test-key')
     vi.stubEnv('B2_BUCKET_ID', 'bucket-1')
@@ -54,5 +55,20 @@ describe('verifyB2Upload signed object scope', () => {
     const result = await verifyB2Upload({ ...input, signature: signatureFor(input) })
     expect(result).toBe(true)
     expect(fetchMock).toHaveBeenCalledTimes(2)
+  })
+})
+
+describe('B2 download authorization lifetime', () => {
+  beforeEach(async () => {
+    vi.resetModules()
+    ;({ getB2DownloadUrl } = await import('./backblaze-b2'))
+  })
+
+  it.each([0, -1, 3601, 1.5])('rejects an invalid authorization lifetime: %s seconds', async (seconds) => {
+    const fetchMock = vi.fn()
+    vi.stubGlobal('fetch', fetchMock)
+    await expect(getB2DownloadUrl('couples/couple-1/large-media/user-1/file.mp4', seconds))
+      .rejects.toThrow('must expire within 1 to 3600 seconds')
+    expect(fetchMock).not.toHaveBeenCalled()
   })
 })

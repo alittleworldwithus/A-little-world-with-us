@@ -1,11 +1,12 @@
 // @vitest-environment node
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { sendTelegramMessage } = vi.hoisted(() => ({
+const { sendTelegramMessage, answerTelegramCallbackQuery } = vi.hoisted(() => ({
   sendTelegramMessage: vi.fn(),
+  answerTelegramCallbackQuery: vi.fn(),
 }))
 
-vi.mock('@/lib/telegram', () => ({ sendTelegramMessage }))
+vi.mock('@/lib/telegram', () => ({ sendTelegramMessage, answerTelegramCallbackQuery }))
 
 import { POST } from './route'
 
@@ -23,6 +24,7 @@ const allowedRequest = (body: unknown, token = SECRET) =>
 describe('Telegram webhook security and commands', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    answerTelegramCallbackQuery.mockResolvedValue(true)
     process.env.TELEGRAM_WEBHOOK_SECRET_TOKEN = SECRET
     process.env.TELEGRAM_ALLOWED_USER_IDS = '123456789,987654321'
     process.env.TELEGRAM_EXTRA_ALLOWED_USER_IDS = ''
@@ -129,12 +131,14 @@ describe('Telegram webhook security and commands', () => {
     sendTelegramMessage.mockResolvedValue({ ok: true })
     const response = await POST(allowedRequest({
       callback_query: {
+        id: 'callback-query-1',
         data: 'world_quiz_ans:B',
         from: { id: 123456789 },
         message: { chat: { id: -1003992125718 }, message_thread_id: 2 },
       },
     }))
     expect(response.status).toBe(200)
+    expect(answerTelegramCallbackQuery).toHaveBeenCalledWith('callback-query-1')
     expect(sendTelegramMessage).toHaveBeenCalledWith(
       expect.stringContaining('사랑해'),
       expect.objectContaining({ chatId: -1003992125718, topicId: 2 })

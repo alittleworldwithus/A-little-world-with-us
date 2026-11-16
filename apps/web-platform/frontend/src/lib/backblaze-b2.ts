@@ -183,6 +183,9 @@ async function deleteB2FileVersion(auth: B2Auth, fileId: string, expectedFileNam
 }
 
 export async function getB2DownloadUrl(fileName: string, validSeconds = 900) {
+  if (!Number.isInteger(validSeconds) || validSeconds < 1 || validSeconds > 3600) {
+    throw new Error('B2 download authorization must expire within 1 to 3600 seconds.')
+  }
   if (!configured()) throw new Error('B2 is not configured')
   const auth = await authorize()
   const response = await fetch(`${auth.apiUrl}/b2api/v4/b2_get_download_authorization`, {

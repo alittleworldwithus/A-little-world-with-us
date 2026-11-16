@@ -145,15 +145,13 @@ async function callGemini(messages: AiMessage[], maxTokens: number): Promise<str
   if (!key) throw new Error('gemini is not configured')
   const prompt = messages.map((message) => `${message.role}: ${message.content}`).join('\n\n')
   const model = getModel('gemini', 'gemini-2.5-flash')
-  const url = key.startsWith('AQ')
-    ? `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`
-    : `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`
+  // Keep API keys out of URLs, which may be captured by request logs and traces.
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`
   const response = await fetchWithTimeout(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'x-goog-api-key': key,
-      'Authorization': `Bearer ${key}`,
     },
     body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: maxTokens } }),
   })
@@ -240,9 +238,9 @@ export async function generateAiResponse({
     : resilienceOrder
   const providers = allowedProviders
     ? [
-        ...allowedProviders.filter((candidate) => candidates.includes(candidate as AiProvider)),
-        ...candidates.filter((candidate) => allowedProviders.includes(candidate)),
-      ].filter((candidate, index, list) => list.indexOf(candidate) === index)
+        ...(provider && allowedProviders.includes(provider) ? [provider] : []),
+        ...candidates.filter((candidate) => candidate !== provider && allowedProviders.includes(candidate)),
+      ]
     : candidates
 
   if (!providers.length) {

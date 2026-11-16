@@ -12,5 +12,18 @@ enabled = true
 policy = "per_worker"
 deno_version = 2
 
-# All production Edge Functions currently require JWT verification.
-# Keep function-specific overrides here if that policy changes.
+# These scheduled-job endpoints intentionally disable Supabase JWT verification.
+# Each handler independently validates its dedicated x-job-secret against a
+# restricted SECURITY DEFINER verifier that is executable only by service_role.
+# Keep these overrides in sync with the deployed function settings.
+[functions.reveal-surprises]
+verify_jwt = false
+
+[functions.check-geofence]
+verify_jwt = false
+
+[functions.check-battery]
+verify_jwt = false
+
+[functions.check-missed-checkin]
+verify_jwt = false

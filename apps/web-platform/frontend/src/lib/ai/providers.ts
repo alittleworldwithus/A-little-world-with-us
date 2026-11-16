@@ -143,17 +143,15 @@ async function callOpenAiCompatible(
 async function callGemini(messages: AiMessage[], maxTokens: number): Promise<string> {
   const key = process.env.GEMINI_API_KEY
   if (!key) throw new Error('gemini is not configured')
-  const prompt = messages.map((message) => `${message.role}: ${message.content}`).join('\n\n')
+  const prompt = messages.map((message) => `${message.role}: ${message.content}`).join('\\n\\n')
   const model = getModel('gemini', 'gemini-2.5-flash')
-  const url = key.startsWith('AQ')
-    ? `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`
-    : `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`
+  // Keep API keys out of URLs, which may be captured by request logs and traces.
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`
   const response = await fetchWithTimeout(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'x-goog-api-key': key,
-      'Authorization': `Bearer ${key}`,
     },
     body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: maxTokens } }),
   })

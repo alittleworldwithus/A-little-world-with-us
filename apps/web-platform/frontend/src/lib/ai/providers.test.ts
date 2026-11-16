@@ -40,3 +40,45 @@ describe('Gemini provider request security', () => {
     })
   })
 })
+
+describe('AI provider fallback boundaries', () => {
+  beforeEach(() => {
+    vi.stubEnv('GROQ_API_KEY', 'test-groq-key')
+    vi.stubEnv('GEMINI_API_KEY', 'test-gemini-key')
+    fetchWithTimeout.mockReset()
+  })
+
+  afterEach(() => {
+    vi.unstubAllEnvs()
+  })
+
+  it('falls back to the next explicitly allowed provider after a provider failure', async () => {
+    fetchWithTimeout
+      .mockResolvedValueOnce(new Response('{}', { status: 503 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({
+        candidates: [{ content: { parts: [{ text: 'Fallback response' }] } }],
+      }), { status: 200 }))
+
+    const result = await generateAiResponse({
+      messages: [{ role: 'user', content: 'Hello' }],
+      provider: 'groq',
+      allowedProviders: ['groq', 'gemini'],
+    })
+
+    expect(result).toEqual({ content: 'Fallback response', provider: 'gemini' })
+    expect(fetchWithTimeout).toHaveBeenCalledTimes(2)
+  })
+
+  it('never falls back outside the caller-provided provider allowlist', async () => {
+    vi.stubEnv('GROQ_API_KEY', '')
+    await expect(generateAiResponse({
+      messages: [{ role: 'user', content: 'Hello' }],
+      provider: 'groq',
+      allowedProviders: ['groq'],
+    })).rejects.toMatchObject({
+      name: 'AIProviderError',
+      failures: [{ provider: 'groq', error: 'groq is not configured' }],
+    })
+    expect(fetchWithTimeout).not.toHaveBeenCalled()
+  })
+})

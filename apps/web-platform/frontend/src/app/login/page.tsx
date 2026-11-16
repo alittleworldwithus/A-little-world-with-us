@@ -3,13 +3,14 @@
 import Link from 'next/link'
 import { type FormEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Heart } from 'lucide-react'
+import { Heart, Eye, EyeOff } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 export default function LoginPage() {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [sessionExpired, setSessionExpired] = useState(false)
@@ -74,17 +75,27 @@ export default function LoginPage() {
           <label htmlFor="password" className="sr-only">
             Password
           </label>
-          <input
-            id="password"
-            required
-            minLength={6}
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            placeholder="Password"
-            autoComplete="current-password"
-            className="w-full rounded-input border border-accent-1/20 bg-card px-4 py-3 text-sm text-text-1 outline-none focus:border-accent-1"
-          />
+          <div className="relative flex items-center">
+            <input
+              id="password"
+              required
+              minLength={6}
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              placeholder="Password"
+              autoComplete="current-password"
+              className="w-full rounded-input border border-accent-1/20 bg-card px-4 py-3 pr-11 text-sm text-text-1 outline-none focus:border-accent-1"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              className="absolute right-3 text-text-2 hover:text-text-1 transition-colors p-1"
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
           {error && <p className="text-sm text-error">{error}</p>}
           <button
             type="submit"

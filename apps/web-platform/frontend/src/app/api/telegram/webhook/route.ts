@@ -1,6 +1,6 @@
 import { timingSafeEqual } from 'node:crypto'
 import { NextResponse } from 'next/server'
-import { sendTelegramMessage } from '@/lib/telegram'
+import { answerTelegramCallbackQuery, sendTelegramMessage } from '@/lib/telegram'
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://alittleworldwithus.com'
 const MAX_UPDATE_BYTES = 1024 * 1024
@@ -163,6 +163,10 @@ export async function POST(req: Request) {
   try {
     if (update.callback_query) {
       const callback = update.callback_query
+      if (!callback.id) return NextResponse.json({ error: 'Callback query ID is missing.' }, { status: 400 })
+      // Acknowledge the button press immediately so Telegram dismisses its spinner.
+      // Delivery of the follow-up topic message is checked independently below.
+      await answerTelegramCallbackQuery(callback.id)
       const action = callback.data || ''
       const chatId = callback.message?.chat?.id
       const topicId = callback.message?.message_thread_id

@@ -238,9 +238,9 @@ export async function generateAiResponse({
     : resilienceOrder
   const providers = allowedProviders
     ? [
-        ...allowedProviders.filter((candidate) => candidates.includes(candidate as AiProvider)),
-        ...candidates.filter((candidate) => allowedProviders.includes(candidate)),
-      ].filter((candidate, index, list) => list.indexOf(candidate) === index)
+        ...(provider && allowedProviders.includes(provider) ? [provider] : []),
+        ...candidates.filter((candidate) => candidate !== provider && allowedProviders.includes(candidate)),
+      ]
     : candidates
 
   if (!providers.length) {

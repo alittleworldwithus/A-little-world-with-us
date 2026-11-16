@@ -10,5 +10,8 @@ describe('safety notification delivery state', () => {
     expect(expoTicketsDelivered({ data: [{ status: 'ok' }, { status: 'ok' }] }, 2)).toBe(true)
     expect(expoTicketsDelivered({ data: [{ status: 'ok' }, { status: 'error' }] }, 2)).toBe(false)
     expect(expoTicketsDelivered({ data: [{ status: 'ok' }] }, 2)).toBe(false)
+    expect(expoTicketsDelivered({ data: { status: 'ok' } }, 1)).toBe(true)
+    expect(expoTicketsDelivered({ data: { status: 'error' } }, 1)).toBe(false)
+    expect(expoTicketsDelivered({ data: [] }, 0)).toBe(false)
   })
 })

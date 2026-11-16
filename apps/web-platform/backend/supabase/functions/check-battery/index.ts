@@ -1,4 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { expoTicketsDelivered } from '../_shared/expoPush.ts'
 
 type UserLocation = {
   user_id: string
@@ -89,7 +90,12 @@ Deno.serve(async (request) => {
         body: JSON.stringify(messages),
       })
       if (!response.ok) return Response.json({ error: 'Expo Push API rejected the notification' }, { status: 502 })
-      await response.json()
+      const ticketPayload = await response.json().catch(() => null)
+      if (!expoTicketsDelivered(ticketPayload, messages.length)) {
+        // Do not write the debounce log unless Expo accepts every ticket; the
+        // next scheduled run can retry transient ticket-level failures.
+        return Response.json({ error: 'Expo did not accept every battery notification.' }, { status: 502 })
+      }
       sent += messages.length
 
       const { error: insertError } = await supabase.from('battery_alert_log').insert({

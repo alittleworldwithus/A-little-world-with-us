@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import type { JSX } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
@@ -13,7 +14,7 @@ import { getCoupleStatus } from '@/lib/couples'
 import { supabase } from '@/lib/supabase'
 import ConnectedCoupleAvatars from '@/components/shared/ConnectedCoupleAvatars'
 import LoveStreakBadge from '@/components/shared/LoveStreakBadge'
-import { SlidersHorizontal } from 'lucide-react'
+import { SlidersHorizontal, Workflow, Gauge } from 'lucide-react'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 const DaysCounter = dynamic(() => import('@/features/dashboard/DaysCounter'), { loading: () => <DashboardPanelSkeleton /> })
@@ -267,6 +268,49 @@ export default function DashboardPage() {
           </div>
         </div>
       </section>
+
+      {/* Companion Pipelines & AI Quotas Quick Access */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Link
+          href="/workflows"
+          className="flex items-center justify-between p-4 rounded-2xl border border-accent-1/25 bg-card/80 hover:bg-card hover:border-accent-1/50 transition shadow-xs group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="grid h-10 w-10 place-items-center rounded-xl bg-accent-1/15 text-accent-1">
+              <Workflow className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-text-1 group-hover:text-accent-1 transition">
+                Companion Workflows
+              </p>
+              <p className="text-xs text-text-2">
+                8-stage emotional & wellness companion pipeline
+              </p>
+            </div>
+          </div>
+          <span className="text-xs font-semibold text-accent-1">Open →</span>
+        </Link>
+
+        <Link
+          href="/usage"
+          className="flex items-center justify-between p-4 rounded-2xl border border-accent-1/25 bg-card/80 hover:bg-card hover:border-accent-1/50 transition shadow-xs group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="grid h-10 w-10 place-items-center rounded-xl bg-accent-1/15 text-accent-1">
+              <Gauge className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-text-1 group-hover:text-accent-1 transition">
+                AI Quotas & Telemetry
+              </p>
+              <p className="text-xs text-text-2">
+                6 active cognitive models & encrypted credentials
+              </p>
+            </div>
+          </div>
+          <span className="text-xs font-semibold text-accent-1">View →</span>
+        </Link>
+      </div>
 
       {/* Collapsible Customize Toolbar */}
       {showCustomize && (

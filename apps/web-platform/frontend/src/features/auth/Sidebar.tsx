@@ -7,7 +7,7 @@ import {
   LogOut, Calendar, Camera, HeartPulse, HelpCircle, Home, Info,
   Leaf, LockKeyhole, MapPin, MessageCircleHeart, Gamepad2, Music,
   PhoneCall, Settings, Sparkles, Star, MonitorPlay,
-  Languages, Shield, FileText,
+  Languages, Shield, FileText, Workflow, Gauge,
 } from 'lucide-react'
 import LittleWorldLogo from '@/components/shared/LittleWorldLogo'
 import ThemeToggle from '@/components/shared/ThemeToggle'
@@ -53,6 +53,13 @@ const navGroups = [
       { href: '/music', key: 'music', icon: Music },
       { href: '/astrology', key: 'astrology', icon: Star },
       { href: '/automations', key: 'automations', icon: Sparkles },
+    ],
+  },
+  {
+    label: 'Intelligence', labelKey: 'groupIntelligence',
+    items: [
+      { href: '/workflows', key: 'workflows', icon: Workflow },
+      { href: '/usage', key: 'usage', icon: Gauge },
     ],
   },
   {

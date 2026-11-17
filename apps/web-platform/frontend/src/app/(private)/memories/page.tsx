@@ -46,7 +46,7 @@ const MemoryCurationAI = dynamic(
   }
 )
 const MemoryMapContent = dynamic(
-  () => import('@/app/(private)/memories/map/page'),
+  () => import('@/features/memories/MemoryMapContent'),
   { ssr: false, loading: () => <div className="h-96 animate-pulse rounded-2xl bg-card/60" /> }
 )
 const OurStoryContent = dynamic(

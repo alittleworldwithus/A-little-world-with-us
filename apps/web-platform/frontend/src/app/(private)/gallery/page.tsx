@@ -14,7 +14,8 @@ import { getDecryptedObjectUrl, revokeDecryptedUrl } from '@/lib/mediaEncryption
 import PhotoMediaCalendar from '@/components/shared/PhotoMediaCalendar'
 import { useLanguage } from '@/contexts/LanguageContext'
 
-export default function GalleryContent({ showUpload = true }: { showUpload?: boolean }) {
+export default function GalleryContent() {
+  const showUpload = true
   const { t } = useLanguage()
   const [images, setImages] = useState<GalleryImage[]>([])
   const [loading, setLoading] = useState(true)

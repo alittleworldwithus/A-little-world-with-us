@@ -137,7 +137,7 @@ function CycleStrip({ cycle, logs, current, fallbackPeriodLength, allowFertileEs
   const ovulation = addDays(cycle.startDate, cycle.length - 14)
   const fertileStart = addDays(ovulation, -5)
   const fertileEnd = addDays(ovulation, 1)
-  return <div className="mt-3 flex items-center gap-1 overflow-hidden">
+  return <div className="mt-3 flex items-center gap-1 overflow-x-auto scrollbar-none pb-1">
     {Array.from({ length: cycle.length }, (_, index) => {
       const date = addDays(cycle.startDate, index)
       const isPeriod = index < periodLength
@@ -154,12 +154,44 @@ function Today({ summary, onLogPeriod, onOpen, onInsights, onReminders, logs }: 
   const actions: Array<{ Icon: typeof Droplet; label: string; action: () => void }> = [{ Icon: Droplet, label: t('Care.logPeriod'), action: onLogPeriod }, { Icon: Plus, label: t('Care.sections.symptoms'), action: () => onOpen('symptoms') }, { Icon: Heart, label: t('Care.intimacy'), action: () => onOpen('sex') }]
   return <div className="space-y-5"><section className="glass-card p-3"><div className="grid grid-cols-7 gap-1">{days.map((day) => <button key={day.toISOString()} onClick={onLogPeriod} className={`min-h-11 rounded-btn py-2 text-center ${dateKey(day) === dateKey(new Date()) ? 'bg-accent-1/15 text-accent-1' : 'text-text-2'}`}><span className="block text-[10px] uppercase">{day.toLocaleDateString(typeof document !== 'undefined' && document.documentElement.lang === 'my' ? 'my-MM' : 'en-US', { weekday: 'narrow' })}</span><span className="mt-1 flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold mx-auto">{day.getDate()}</span></button>)}</div></section>
     <section className="glass-card relative overflow-hidden p-7 text-center"><div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgb(var(--accent-1)),transparent_55%)] opacity-15" /><div className="relative"><p className="text-xs font-semibold uppercase tracking-[0.22em] text-text-2">{t('Care.todayCycle')}</p><h2 className="mt-3 text-5xl text-accent-2">{getPeriodForecastLabel(summary)}</h2><p className="mt-4 text-sm text-text-2">{getFertilityLabel(summary)} · {t('Care.estimateDisclaimer')}</p>{(periodEstimatePassed || !summary.regular) && <p className="mt-2 text-xs text-warning">{summary.lateByDays > 0 ? t('Care.estimateBeyondRange') : t('Care.estimatePassed')}</p>}</div></section>
-    <section className="grid grid-cols-3 gap-3">{actions.map(({ Icon, label, action }) => <button key={label} onClick={action} className="flex min-h-11 flex-col items-center gap-2 py-2 text-sm text-text-2"><span className="flex h-16 w-16 items-center justify-center rounded-full border border-accent-1/40 bg-card text-accent-1 shadow-[0_0_22px_color-mix(in_srgb,var(--accent-1)_25%,transparent)]"><Icon className="h-7 w-7" /></span>{label}</button>)}</section>
-    <section><div className="mb-3 flex items-center justify-between"><h2 className="text-xl text-text-1">{t('Care.myDailyInsights')}</h2><button onClick={onInsights} className="text-sm text-accent-1">{t('Care.seeAll')}</button></div><div className="grid gap-3 md:grid-cols-2"><InfoCard title={t('Care.cycleDay')} body={summary.day ? t('Care.dayOfCycle').replace('{day}', String(summary.day)).replace('{length}', String(summary.cycleLength)) : t('Care.logPeriodToEstimate')} /><InfoCard title={t('Care.sharedCheckIn')} body={logs.length ? t('Care.sharedCareDays').replace('{count}', String(logs.length)) : t('Care.firstSharedCheckIn')} /></div></section>
+    <section className="grid grid-cols-3 gap-3">
+      {actions.map(({ Icon, label, action }) => (
+        <button
+          key={label}
+          type="button"
+          onClick={action}
+          className="group flex flex-col items-center justify-center gap-2 rounded-2xl border border-border/70 bg-card/60 p-3.5 sm:p-4 text-center shadow-card hover:bg-card hover:border-accent-1/40 transition active:scale-[0.98]"
+        >
+          <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-accent-1/25 bg-accent-1/10 text-accent-1 group-hover:scale-105 transition">
+            <Icon className="h-5 w-5" />
+          </span>
+          <span className="text-xs sm:text-sm font-medium text-text-1 group-hover:text-accent-1 transition">
+            {label}
+          </span>
+        </button>
+      ))}
+    </section>
+    <section>
+      <div className="mb-3 flex items-center justify-between">
+        <h2 className="text-xl text-text-1">{t('Care.myDailyInsights')}</h2>
+        <button onClick={onInsights} className="text-sm text-accent-1">{t('Care.seeAll')}</button>
+      </div>
+      <div className="grid gap-3 md:grid-cols-2 items-stretch">
+        <InfoCard title={t('Care.cycleDay')} body={summary.day ? t('Care.dayOfCycle').replace('{day}', String(summary.day)).replace('{length}', String(summary.cycleLength)) : t('Care.logPeriodToEstimate')} />
+        <InfoCard title={t('Care.sharedCheckIn')} body={logs.length ? t('Care.sharedCareDays').replace('{count}', String(logs.length)) : t('Care.firstSharedCheckIn')} />
+      </div>
+    </section>
     <section className="glass-card p-6"><div className="flex items-center justify-between"><h2 className="text-xl text-text-1">{t('Care.cycleHistory')}</h2><button onClick={onInsights} className="text-sm text-accent-1">{t('Care.seeAll')}</button></div>{buildAllCycleHistory(logs, summary).slice(-3).reverse().map((cycle, index) => <div key={cycle.startDate} className="mt-5 border-b border-border/10 pb-4 last:border-0 last:pb-0"><div className="flex items-center justify-between gap-3"><div><p className="font-semibold text-text-1">{index === 0 ? t('Care.currentCycle') : index === 1 ? t('Care.previous') : t('Care.previousTwo')}</p><p className="text-sm text-text-2">{cycle.length} {t('Care.days')} · {formatDate(cycle.startDate)} – {formatDate(cycle.endDate)}</p></div><span className="text-xs text-text-2">{t('Care.cycleDay')} {index === 0 && summary.day ? summary.day : '—'}</span></div><CycleStrip cycle={cycle} logs={logs} current={index === 0} fallbackPeriodLength={summary.periodLength} allowFertileEstimate={summary.estimateReady} /></div>)}<div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-text-2"><span><i className="mr-1 inline-block h-3 w-3 rounded-full bg-rose-500" />{t('Care.period')}</span><span><i className="mr-1 inline-block h-3 w-3 rounded-full bg-success" />{t('Care.fertileEstimate')}</span><span><i className="mr-1 inline-block h-3 w-3 rounded-full border border-white/50 bg-white" />{t('Care.normal')}</span></div></section>
     <button onClick={onReminders} className="glass-card flex w-full items-center gap-3 p-4 text-left"><Bell className="h-5 w-5 text-accent-1" /><span><strong className="block text-text-1">{t('Care.smartReminders')}</strong><small className="text-text-2">{t('Care.reminderDescription')}</small></span></button></div>
 }
-function InfoCard({ title, body }: Readonly<{ title: string; body: string }>) { return <div className="glass-card p-4"><p className="font-semibold text-text-1">{title}</p><p className="mt-1 text-sm leading-6 text-text-2">{body}</p></div> }
+function InfoCard({ title, body }: Readonly<{ title: string; body: string }>) {
+  return (
+    <div className="glass-card rounded-xl border border-border/60 bg-card/60 p-4 shadow-sm h-full flex flex-col justify-between">
+      <p className="font-semibold text-text-1 text-sm">{title}</p>
+      <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-text-2">{body}</p>
+    </div>
+  )
+}
 
 function DailyLog({ log, initial, onClose, onSave }: Readonly<{ log?: CareLog; initial: Section | null; onClose: () => void; onSave: (draft: CareDraft) => Promise<void> }>) {
   const { t } = useLanguage()

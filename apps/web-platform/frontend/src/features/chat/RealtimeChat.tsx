@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import { Heart, Paperclip, Reply as ReplyIcon, MapPin, Captions, Sparkles, X, Pin, Image as ImageIcon } from 'lucide-react'
+import { Heart, Paperclip, Reply as ReplyIcon, MapPin, Captions, Sparkles, X, Pin, Image as ImageIcon, Check, CheckCheck } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { getCoupleStatus } from '@/lib/couples'
 import ConnectedCoupleAvatars from '@/components/shared/ConnectedCoupleAvatars'
@@ -397,7 +397,7 @@ export default function RealtimeChat({ className }: RealtimeChatProps = {}) {
         setHasMore(false)
       }
 
-      // Setup Realtime Channel (✅ No infinite loop, proper cleanup)
+      // Setup Realtime Channel (No infinite loop, proper cleanup)
       const channel = supabase
         .channel(`chat-${couple.id}`)
         .on('broadcast', { event: 'pinned_message_updated' }, (eventPayload) => {
@@ -468,7 +468,7 @@ export default function RealtimeChat({ className }: RealtimeChatProps = {}) {
             setMessages((current) => current.map((message) => message.id === rawMessage.id ? { ...message, ...rawMessage, media_url: mediaUrl } : message))
           }
         )
-        .subscribe() // ✅ Subscribe is called only once, at the end.
+        .subscribe() // Subscribe is called only once, at the end.
 
       if (isMounted) {
         channelRef.current = channel
@@ -955,11 +955,11 @@ export default function RealtimeChat({ className }: RealtimeChatProps = {}) {
                 {pinnedMessage.message_type === 'text'
                   ? (pinnedMessage.content || 'Text message')
                   : pinnedMessage.message_type === 'photo'
-                    ? '📷 Photo'
+                    ? 'Photo'
                     : pinnedMessage.message_type === 'voice'
-                      ? '🎤 Voice message'
+                      ? 'Voice message'
                       : pinnedMessage.message_type === 'file'
-                        ? '📎 File attachment'
+                        ? 'File attachment'
                         : 'Message'}
               </p>
             </div>
@@ -996,9 +996,9 @@ export default function RealtimeChat({ className }: RealtimeChatProps = {}) {
           const replyToMessage = message.reply_to ? messages.find((m) => m.id === message.reply_to) : null
           const isMessagePinned = pinnedMessage?.id === message.id
           const isMessageHighlighted = highlightedMessageId === message.id
-          let deliveryStatus = <span>✓</span>
-          if (message.delivered_at) deliveryStatus = <span>✓✓</span>
-          if (message.seen_at) deliveryStatus = <span className="text-blue-400">✓✓</span>
+          let deliveryStatus = <Check className="h-3 w-3 inline text-text-2 opacity-60" />
+          if (message.delivered_at) deliveryStatus = <CheckCheck className="h-3.5 w-3.5 inline text-text-2 opacity-80" />
+          if (message.seen_at) deliveryStatus = <CheckCheck className="h-3.5 w-3.5 inline text-accent-1" />
           return (
             <div key={message.id} id={`chat-msg-${message.id}`} className={`flex w-full ${message.sender_id === currentUserId ? 'justify-end' : 'justify-start'} group transition-all duration-300`}>
               <div className={`flex flex-col gap-1 max-w-[85%] sm:max-w-[75%] md:max-w-[70%] ${message.sender_id === currentUserId ? 'items-end' : 'items-start'}`}>
@@ -1031,7 +1031,7 @@ export default function RealtimeChat({ className }: RealtimeChatProps = {}) {
                   {message.message_type === 'gif' && message.media_url && <Image src={message.media_url} alt="GIF" width={480} height={480} unoptimized className="max-w-full rounded-lg" />}
                   {message.message_type === 'file' && <div className="flex items-center gap-2"><Paperclip className="h-4 w-4" /><span className="text-sm break-words">{message.content}</span></div>}
                   {message.message_type === 'location' && message.location_payload && <a href={`https://www.google.com/maps?q=${message.location_payload.latitude},${message.location_payload.longitude}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-input bg-soft-tint p-3 text-sm hover:bg-accent-1/10"><MapPin className="h-5 w-5 text-accent-1 shrink-0" /><span><strong>Shared location</strong><br />{message.location_payload.latitude.toFixed(5)}, {message.location_payload.longitude.toFixed(5)} · ±{Math.round(message.location_payload.accuracy ?? 0)}m</span></a>}
-                  {message.message_type === 'sos' && message.location_payload && <a href={`https://www.google.com/maps?q=${message.location_payload.latitude},${message.location_payload.longitude}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-xl border border-red-400/40 bg-red-500/15 p-3 text-sm text-red-100 hover:bg-red-500/25"><MapPin className="h-5 w-5 text-red-300 shrink-0" /><span><strong>🆘 Emergency SOS</strong><br />Open the sender’s current location.</span></a>}
+                  {message.message_type === 'sos' && message.location_payload && <a href={`https://www.google.com/maps?q=${message.location_payload.latitude},${message.location_payload.longitude}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 rounded-xl border border-red-400/40 bg-red-500/15 p-3 text-sm text-red-100 hover:bg-red-500/25"><MapPin className="h-5 w-5 text-red-300 shrink-0" /><span><strong>Emergency SOS</strong><br />Open the sender’s current location.</span></a>}
                   <div className={`mt-1 flex items-center justify-end gap-1.5 text-[10px] select-none ${message.sender_id === currentUserId ? 'opacity-85' : 'text-text-2 opacity-80'}`}>
                     <span>{(() => { try { return new Date(message.created_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); } catch { return ''; } })()}</span>
                     {message.edited_at && <span className="text-accent-2 italic">(edited)</span>}

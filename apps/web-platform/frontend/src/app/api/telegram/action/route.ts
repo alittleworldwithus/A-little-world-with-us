@@ -25,7 +25,7 @@ export async function POST(req: Request) {
     }
 
     if (action === 'world_korean_quiz') {
-      const msg = '✍️ <b>Daily Korean Quiz:</b>\n"사랑해" (Saranghae) ၏ မြန်မာလို အဓိပ္ပာယ်မှာ အဘယ်နည်း?\n\nခလုတ်နှိပ်၍ ဖြေဆိုပါ:'
+      const msg = '<b>Daily Korean Quiz:</b>\n"사랑해" (Saranghae) ၏ မြန်မာလို အဓိပ္ပာယ်မှာ အဘယ်နည်း?\n\nခလုတ်နှိပ်၍ ဖြေဆိုပါ:'
       const buttons = [
         [
           { text: 'A) ကျေးဇူးတင်ပါတယ်', callback_data: 'world_quiz_ans:A' },
@@ -47,16 +47,16 @@ export async function POST(req: Request) {
       }
       const isCorrect = choice === 'B'
       const feedback = isCorrect
-        ? '🎉 <b>မှန်ကန်ပါတယ်!</b> "사랑해" = ချစ်တယ် (I love you) ဖြစ်ပါတယ်။ အမှတ် +10 ရရှိပါပြီ! 💖'
-        : '❌ <b>မှားယွင်းနေပါတယ်ခင်ဗျာ။</b> အဖြေမှန်မှာ B) ချစ်တယ် (I love you) ဖြစ်ပါတယ်။ မနက်ဖြန် ထပ်ကြိုးစားပါ! ✨'
+        ? '<b>မှန်ကန်ပါတယ်!</b> "사랑해" = ချစ်တယ် (I love you) ဖြစ်ပါတယ်။ အမှတ် +10 ရရှိပါပြီ!'
+        : '<b>မှားယွင်းနေပါတယ်ခင်ဗျာ။</b> အဖြေမှန်မှာ B) ချစ်တယ် (I love you) ဖြစ်ပါတယ်။ မနက်ဖြန် ထပ်ကြိုးစားပါ!'
       await sendTelegramMessage(feedback, {})
       return NextResponse.json({ status: 'ok', correct: isCorrect })
     }
 
     if (action === 'world_open_memories') {
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://alittleworldwithus.com'
-      const msg = '📖 <b>Couple Memories:</b>\nအမှတ်တရ ဓာတ်ပုံများနှင့် Diary များကို အောက်ပါ link တွင် ဖွင့်လှစ်ကြည့်ရှုနိုင်ပါသည်:'
-      const buttons = [[{ text: '💖 Open Memories Album', url: appUrl + '/memories' }]]
+      const msg = '<b>Couple Memories:</b>\nအမှတ်တရ ဓာတ်ပုံများနှင့် Diary များကို အောက်ပါ link တွင် ဖွင့်လှစ်ကြည့်ရှုနိုင်ပါသည်:'
+      const buttons = [[{ text: 'Open Memories Album', url: appUrl + '/memories' }]]
       await sendTelegramMessage(msg, { inlineKeyboard: buttons })
       return NextResponse.json({ status: 'ok', action: 'memories_link_sent' })
     }

@@ -210,7 +210,7 @@ export default function CalendarPage() {
       {activeTab === 'calendar' && (
         <div className="space-y-6">
           {/* Top 2-Column Calendar & Day Agenda */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
             {/* Left: Compact, Proportional Photo & Event Calendar */}
             <div className="lg:col-span-7 xl:col-span-7 flex justify-center">
               <div className="w-full max-w-[480px]">
@@ -223,8 +223,8 @@ export default function CalendarPage() {
             </div>
 
             {/* Right: Selected Date Agenda & Quick Add */}
-            <div className="lg:col-span-5 xl:col-span-5">
-              <div className="glass-card rounded-card border border-border/70 bg-card p-5 shadow-card space-y-4">
+            <div className="lg:col-span-5 xl:col-span-5 flex flex-col">
+              <div className="glass-card rounded-2xl border border-border/70 bg-card p-5 shadow-card space-y-4 h-full flex flex-col justify-between min-h-[420px]">
                 {/* Date Header */}
                 <div className="flex items-center justify-between border-b border-border/40 pb-3">
                   <div>
@@ -299,7 +299,7 @@ export default function CalendarPage() {
                 {eventError ? <p role="alert" className="rounded-lg bg-error/10 p-3 text-sm text-error">{eventError}</p> : null}
 
                 {/* Selected Date Events List */}
-                <div className="space-y-2.5">
+                <div className="space-y-2.5 flex-1 flex flex-col justify-between">
                   <div className="flex items-center justify-between text-xs text-text-2">
                     <span>{t('Calendar.eventsOccasions')}</span>
                     <span>{selectedDateEvents.length} {t('Calendar.scheduled')}</span>
@@ -308,7 +308,7 @@ export default function CalendarPage() {
                   {loadingEvents ? (
                     <div className="py-6 text-center text-xs text-text-2 animate-pulse">{t('Calendar.loadingPlans')}</div>
                   ) : selectedDateEvents.length === 0 ? (
-                    <div className="py-8 text-center rounded-xl border border-dashed border-border/60 bg-card/40">
+                    <div className="flex-1 py-8 text-center rounded-xl border border-dashed border-border/60 bg-card/40 flex flex-col items-center justify-center">
                       <Sparkles className="mx-auto h-5 w-5 text-accent-1/50 mb-1.5" />
                       <p className="text-xs text-text-2">{t('Calendar.noPlansToday')}</p>
                       <button
@@ -320,7 +320,7 @@ export default function CalendarPage() {
                       </button>
                     </div>
                   ) : (
-                    <div className="space-y-2">
+                    <div className="space-y-2 max-h-[280px] overflow-y-auto pr-1">
                       {selectedDateEvents.map((event) => (
                         <div
                           key={event.id}
@@ -366,12 +366,12 @@ export default function CalendarPage() {
           </div>
 
           {/* Bottom 2-Column: Bucket List & Shared Wishlist */}
-          <div className="grid gap-6 lg:grid-cols-2">
-            <div className="glass-card rounded-card border border-border/70 bg-card p-5 shadow-card">
+          <div className="grid gap-6 lg:grid-cols-2 items-stretch">
+            <div className="glass-card rounded-2xl border border-border/70 bg-card p-5 shadow-card h-full flex flex-col">
               <BucketList />
             </div>
 
-            <div className="glass-card rounded-2xl border border-border/70 bg-card p-5 shadow-card">
+            <div className="glass-card rounded-2xl border border-border/70 bg-card p-5 shadow-card h-full flex flex-col">
               <SharedWishlist />
             </div>
           </div>

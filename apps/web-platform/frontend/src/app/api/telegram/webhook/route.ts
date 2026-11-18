@@ -109,7 +109,7 @@ function quizButtons() {
 }
 
 async function sendQuiz(topicId?: number, chatId?: number) {
-  const message = '✍️ <b>Daily Korean Quiz</b>\n"사랑해" (Saranghae) ၏ မြန်မာလို အဓိပ္ပာယ်မှာ အဘယ်နည်း?\n\nအဖြေကို ခလုတ်နှိပ်ပြီး ရွေးချယ်ပါ။'
+  const message = '<b>Daily Korean Quiz</b>\n"사랑해" (Saranghae) ၏ မြန်မာလို အဓိပ္ပာယ်မှာ အဘယ်နည်း?\n\nအဖြေကို ခလုတ်နှိပ်ပြီး ရွေးချယ်ပါ။'
   await sendReply(message, { topicId, chatId, inlineKeyboard: quizButtons() })
 }
 
@@ -182,23 +182,23 @@ export async function POST(req: Request) {
           return NextResponse.json({ error: 'Invalid quiz answer.' }, { status: 400 })
         }
         const feedback = choice === 'B'
-          ? '🎉 <b>မှန်ကန်ပါတယ်!</b> "사랑해" = ချစ်တယ် (I love you) ဖြစ်ပါတယ်။ 💖'
-          : '❌ အဖြေမှန်မှာ B) ချစ်တယ် (I love you) ဖြစ်ပါတယ်။ နောက်တစ်ကြိမ် ထပ်ကြိုးစားပါ။ ✨'
+          ? '<b>မှန်ကန်ပါတယ်!</b> "사랑해" = ချစ်တယ် (I love you) ဖြစ်ပါတယ်။'
+          : 'အဖြေမှန်မှာ B) ချစ်တယ် (I love you) ဖြစ်ပါတယ်။ နောက်တစ်ကြိမ် ထပ်ကြိုးစားပါ။'
         await sendReply(feedback, { topicId, chatId })
         return NextResponse.json({ ok: true, action: 'quiz_answered' })
       }
 
       if (action === 'world_open_memories') {
-        await sendReply('📖 Couple Memories ကို ဒီမှာဖွင့်နိုင်ပါတယ်။', {
+        await sendReply('Couple Memories ကို ဒီမှာဖွင့်နိုင်ပါတယ်။', {
           topicId,
           chatId,
-          inlineKeyboard: appButton('💖 Open Memories', `${APP_URL}/memories`),
+          inlineKeyboard: appButton('Open Memories', `${APP_URL}/memories`),
         })
         return NextResponse.json({ ok: true, action: 'memories_link_sent' })
       }
 
       if (action === 'world_open_budget') {
-        await sendReply('📊 Shared Budget ကို ဒီမှာဖွင့်နိုင်ပါတယ်။', {
+        await sendReply('Shared Budget ကို ဒီမှာဖွင့်နိုင်ပါတယ်။', {
           topicId,
           chatId,
           inlineKeyboard: appButton('Open Budget Tracker', `${APP_URL}/budget`),
@@ -228,7 +228,7 @@ export async function POST(req: Request) {
       }
       if (command === '/start' || command === '/help') {
         const helpText = [
-          '❤️ <b>A Little World With Us — Commands</b>',
+          '<b>A Little World With Us — Commands</b>',
           '',
           '• <code>/status</code> — Bot and app links',
           '• <code>/morning_brief</code> — Couple daily briefing',
@@ -244,14 +244,14 @@ export async function POST(req: Request) {
         await sendReply(helpText, {
           topicId,
           chatId,
-          inlineKeyboard: appButton('❤️ Open Our World', APP_URL),
+          inlineKeyboard: appButton('Open Our World', APP_URL),
         })
         return NextResponse.json({ ok: true, command: 'help' })
       }
 
       if (command === '/status') {
         await sendReply(
-          '🤖 <b>Our World Bot</b>\nWebhook request authenticated and command access allowed. Shared-data sync is managed by the app; this command does not independently verify database or media sync.',
+          '<b>Our World Bot</b>\nWebhook request authenticated and command access allowed. Shared-data sync is managed by the app; this command does not independently verify database or media sync.',
           {
             topicId,
             chatId,
@@ -266,11 +266,11 @@ export async function POST(req: Request) {
 
       if (command === '/morning_brief' || command === '/digest') {
         const briefing = [
-          '☀️ <b>Our Little World — Daily Briefing</b>',
+          '<b>Our Little World — Daily Briefing</b>',
           '',
-          '💌 <i>Together is our favorite place to be. Have a gentle, beautiful day!</i>',
+          '<i>Together is our favorite place to be. Have a gentle, beautiful day!</i>',
           '',
-          '✍️ Korean quiz is ready whenever you are.',
+          'Korean quiz is ready whenever you are.',
         ].join('\n')
         await sendReply(briefing, {
           topicId,
@@ -289,7 +289,7 @@ export async function POST(req: Request) {
       }
 
       if (command === '/budget') {
-        await sendReply('📊 Shared Budget ကိုဖွင့်ပြီး မှတ်တမ်းတင်နိုင်ပါတယ်။', {
+        await sendReply('Shared Budget ကိုဖွင့်ပြီး မှတ်တမ်းတင်နိုင်ပါတယ်။', {
           topicId,
           chatId,
           inlineKeyboard: appButton('Open Budget Tracker', `${APP_URL}/budget`),
@@ -298,7 +298,7 @@ export async function POST(req: Request) {
       }
 
       if (command === '/memories') {
-        await sendReply('📖 Couple Memories ကိုဖွင့်ကြည့်နိုင်ပါတယ်။', {
+        await sendReply('Couple Memories ကိုဖွင့်ကြည့်နိုင်ပါတယ်။', {
           topicId,
           chatId,
           inlineKeyboard: appButton('Open Memories', `${APP_URL}/memories`),
@@ -316,13 +316,13 @@ export async function POST(req: Request) {
 
       if (command === '/share') {
         await sendReply(
-          '📤 <b>Share Our Content</b>\nOur World app ကနေ memories နဲ့ stories တွေကို share လုပ်နိုင်ပါတယ်။',
+          '<b>Share Our Content</b>\nOur World app ကနေ memories နဲ့ stories တွေကို share လုပ်နိုင်ပါတယ်။',
           {
             topicId,
             chatId,
             inlineKeyboard: [
-              [{ text: '📖 Share a Memory', url: `${APP_URL}/memories` }],
-              [{ text: '💌 Our Story', url: `${APP_URL}/couple` }],
+              [{ text: 'Share a Memory', url: `${APP_URL}/memories` }],
+              [{ text: 'Our Story', url: `${APP_URL}/couple` }],
             ],
           }
         )
@@ -331,7 +331,7 @@ export async function POST(req: Request) {
 
       if (command === '/anniversary') {
         await sendReply(
-          '💍 <b>Anniversary & Milestones</b>\nSpecial dates နဲ့ milestones တွေကို app ထဲမှာ ကြည့်နိုင်ပါတယ်။ Anniversary reminders ကို bot က အလိုအလျောက် ပို့ပေးပါမယ်။',
+          '<b>Anniversary & Milestones</b>\nSpecial dates နဲ့ milestones တွေကို app ထဲမှာ ကြည့်နိုင်ပါတယ်။ Anniversary reminders ကို bot က အလိုအလျောက် ပို့ပေးပါမယ်။',
           {
             topicId,
             chatId,
@@ -343,7 +343,7 @@ export async function POST(req: Request) {
 
       if (command === '/checkin') {
         await sendReply(
-          '📍 <b>Safety Check-in</b>\nPartner ရဲ့ safety check-in status ကို app ကနေ update လုပ်နိုင်ပါတယ်။',
+          '<b>Safety Check-in</b>\nPartner ရဲ့ safety check-in status ကို app ကနေ update လုပ်နိုင်ပါတယ်။',
           {
             topicId,
             chatId,
@@ -355,13 +355,13 @@ export async function POST(req: Request) {
 
       if (command === '/korean') {
         await sendReply(
-          '🇰🇷 <b>Korean Learning</b>\nDaily Korean word နဲ့ quiz ကို app ထဲမှာ လေ့ကျင့်နိုင်ပါတယ်။',
+          '<b>Korean Learning</b>\nDaily Korean word နဲ့ quiz ကို app ထဲမှာ လေ့ကျင့်နိုင်ပါတယ်။',
           {
             topicId,
             chatId,
             inlineKeyboard: [
-              [{ text: '✍️ Take Quiz Now', callback_data: 'world_start_quiz' }],
-              [{ text: '📚 Korean Dictionary', url: `${APP_URL}/korean` }],
+              [{ text: 'Take Quiz Now', callback_data: 'world_start_quiz' }],
+              [{ text: 'Korean Dictionary', url: `${APP_URL}/korean` }],
             ],
           }
         )

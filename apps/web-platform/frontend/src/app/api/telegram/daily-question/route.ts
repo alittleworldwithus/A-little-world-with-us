@@ -58,17 +58,17 @@ async function handleDailyQuestion(req: Request) {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://alittleworldwithus.com'
 
     const message = [
-      '💌 <b>[A Little World With Us] Today\'s Couple Question</b>',
+      '<b>[A Little World With Us] Today\'s Couple Question</b>',
       '',
-      `❓ <b>"${questionText}"</b>`,
+      `<b>"${questionText}"</b>`,
       '',
       '<i>Take a quiet minute together to share your honest answers and connect.</i>',
     ].join('\n')
 
     const inlineKeyboard = [
       [
-        { text: '💖 Answer in Couple Journal', url: `${appUrl}/couple` },
-        { text: '📖 View Past Answers', url: `${appUrl}/memories` },
+        { text: 'Answer in Couple Journal', url: `${appUrl}/couple` },
+        { text: 'View Past Answers', url: `${appUrl}/memories` },
       ],
     ]
 

@@ -52,9 +52,16 @@ function createCard(name: string, anniversary: string, copy: ShareCardCopy, loca
     context.font = '30px "Noto Sans Myanmar", Georgia, serif'
     context.fillStyle = colors.text
     context.fillText(copy.since.replace('{date}', formatDate(anniversary, locale)), 80, 390, 1000)
-    context.font = '78px Georgia'
+    context.save()
+    context.translate(1022, 450)
+    context.scale(0.8, 0.8)
+    context.beginPath()
+    context.moveTo(0, 0)
+    context.bezierCurveTo(-25, -25, -50, 10, 0, 50)
+    context.bezierCurveTo(50, 10, 25, -25, 0, 0)
     context.fillStyle = colors.secondaryAccent
-    context.fillText('♥', 1022, 494)
+    context.fill()
+    context.restore()
     canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error(copy.createFailed)), 'image/png')
   })
 }

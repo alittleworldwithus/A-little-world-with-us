@@ -64,7 +64,9 @@ export default function LoveStreakBadge({
         <Flame className="h-3.5 w-3.5 text-accent-1 animate-pulse" />
         <span>{streakData.current_streak} {streakData.current_streak === 1 ? t('dashboard.streak.day') : t('dashboard.streak.days')}</span>
         {streakData.checkedInToday ? (
-          <span className="text-[10px] text-accent-1">❤️</span>
+          <span className="inline-flex items-center text-accent-1">
+            <Heart className="h-3 w-3 fill-current" />
+          </span>
         ) : (
           <button
             type="button"

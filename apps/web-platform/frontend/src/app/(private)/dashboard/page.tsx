@@ -256,12 +256,12 @@ export default function DashboardPage() {
           </div>
 
           {/* Today's Focus & Little Ritual side-by-side */}
-          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 pt-2 border-t border-border/40">
-            <div className="min-w-0 rounded-xl border border-border/50 bg-card/60 p-3 shadow-xs">
+          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 pt-2 border-t border-border/40 items-stretch">
+            <div className="min-w-0 rounded-xl border border-border/50 bg-card/60 p-3 shadow-xs h-full flex flex-col justify-between">
               <span className="text-[10px] uppercase font-semibold tracking-wider text-accent-1 block mb-0.5">{t('dashboard.focus')}</span>
               <p className="text-xs text-text-1 leading-relaxed">{heroCopy.focus}</p>
             </div>
-            <div className="min-w-0 rounded-xl border border-border/50 bg-card/60 p-3 shadow-xs">
+            <div className="min-w-0 rounded-xl border border-border/50 bg-card/60 p-3 shadow-xs h-full flex flex-col justify-between">
               <span className="text-[10px] uppercase font-semibold tracking-wider text-text-2 block mb-0.5">{t('dashboard.ritual')}</span>
               <p className="text-xs text-text-1 leading-relaxed">{heroCopy.ritual}</p>
             </div>

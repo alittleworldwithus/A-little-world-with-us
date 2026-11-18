@@ -12,7 +12,7 @@ export type MapHistory = { user_id: string; latitude: number; longitude: number;
 export type MapPlace = { id: string; name: string; latitude: number; longitude: number; radius_meters: number }
 export type MapAlert = { id: string; reporter_id: string; latitude: number | null; longitude: number | null; created_at: string }
 
-const marker = (label: string, color: string) => divIcon({ className: 'pair-map-marker', html: `<span style="display:grid;place-items:center;width:34px;height:34px;border-radius:9999px;border:2px solid #fff;background:${color};box-shadow:0 4px 16px rgba(0,0,0,.45);font-size:16px">${label}</span>`, iconSize: [34, 34], iconAnchor: [17, 17] })
+const marker = (content: string, color: string) => divIcon({ className: 'pair-map-marker', html: `<span style="display:grid;place-items:center;width:34px;height:34px;border-radius:9999px;border:2px solid #fff;background:${color};box-shadow:0 4px 16px rgba(0,0,0,.45);color:#fff">${content}</span>`, iconSize: [34, 34], iconAnchor: [17, 17] })
 
 function FocusMap({ point }: { point: LatLngExpression | null }) {
   const map = useMap()
@@ -39,7 +39,7 @@ export default function PairLocationMap({ locations, history, selectedUser, name
     <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>' url={tileUrl} />
     <FocusMap point={focus} />
     {route.length > 1 && <Polyline positions={route} pathOptions={{ color: theme.accent2, weight: 4, opacity: 0.75 }} />}
-    {mapLocations.map((row, index) => <Marker key={row.user_id} position={[row.latitude, row.longitude]} icon={marker(index === 0 ? '♥' : '✦', index === 0 ? theme.accent1 : theme.accent2)}><Popup><strong>{names[row.user_id] ?? 'Linked account'}</strong><br />Updated {new Date(row.updated_at).toLocaleString()}<br />Accuracy ±{Math.round(row.accuracy ?? 0)}m</Popup></Marker>)}
+    {mapLocations.map((row, index) => <Marker key={row.user_id} position={[row.latitude, row.longitude]} icon={marker(index === 0 ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>' : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg>', index === 0 ? theme.accent1 : theme.accent2)}><Popup><strong>{names[row.user_id] ?? 'Linked account'}</strong><br />Updated {new Date(row.updated_at).toLocaleString()}<br />Accuracy ±{Math.round(row.accuracy ?? 0)}m</Popup></Marker>)}
     {mapLocations.map((row, index) => <Circle key={`${row.user_id}-accuracy`} center={[row.latitude, row.longitude]} radius={Math.max(row.accuracy ?? 0, 10)} pathOptions={{ color: index === 0 ? theme.accent1 : theme.accent2, fillOpacity: 0.08 }} />)}
     {mapPlaces.map((place) => <Circle key={place.id} center={[place.latitude, place.longitude]} radius={place.radius_meters} pathOptions={{ color: theme.accent1, fillOpacity: 0.12 }}><Popup><strong>{place.name}</strong><br />Safe zone · {place.radius_meters}m</Popup></Circle>)}
     {mapAlerts.map((alert) => <Marker key={alert.id} position={[alert.latitude as number, alert.longitude as number]} icon={marker('!', '#ef4444')}><Popup><strong>SOS alert</strong><br />{new Date(alert.created_at).toLocaleString()}</Popup></Marker>)}

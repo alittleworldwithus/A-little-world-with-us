@@ -299,7 +299,7 @@ export default function AutomationPipelinePage() {
       if (node.id === 'node-morning-time') {
         executionDetail = 'Chime triggered for 07:00 AM (Asia/Yangon)';
       } else if (node.id === 'node-love-note-ai') {
-        executionDetail = 'AI generated: "မင်္ဂလာနံနက်ခင်းပါ ချစ်ရသူရေ... မနက်စာကောင်းကောင်းစားပြီး ရေများများသောက်နော် 💖"';
+        executionDetail = 'AI generated: "မင်္ဂလာနံနက်ခင်းပါ ချစ်ရသူရေ... မနက်စာကောင်းကောင်းစားပြီး ရေများများသောက်နော်"';
       } else if (node.id === 'node-wellness-check') {
         executionDetail = 'Health check: Hydration prompt & cycle comfort note logged.';
       } else if (node.id === 'node-finance-guard') {
@@ -369,9 +369,9 @@ export default function AutomationPipelinePage() {
       if (!fromNode || !toNode) return null;
 
       const startX = fromNode.x + 240;
-      const startY = fromNode.y + 46;
+      const startY = fromNode.y + 54;
       const endX = toNode.x;
-      const endY = toNode.y + 46;
+      const endY = toNode.y + 54;
 
       const dx = Math.abs(endX - startX) * 0.5;
       const path = `M ${startX} ${startY} C ${startX + dx} ${startY}, ${endX - dx} ${endY}, ${endX} ${endY}`;
@@ -544,8 +544,9 @@ export default function AutomationPipelinePage() {
                   style={{
                     transform: `translate3d(${node.x}px, ${node.y}px, 0)`,
                     width: '240px',
+                    minHeight: '108px',
                   }}
-                  className={`absolute z-10 rounded-2xl border p-3.5 bg-card shadow-sm transition-all select-none hover:shadow-md ${
+                  className={`absolute z-10 rounded-2xl border p-3.5 bg-card shadow-sm transition-all select-none hover:shadow-md flex flex-col justify-between ${
                     !node.enabled
                       ? 'opacity-65 border-border/50 bg-card/70'
                       : isSelected
@@ -556,9 +557,9 @@ export default function AutomationPipelinePage() {
                   }`}
                 >
                   {/* Left Connection Handle */}
-                  <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-card border-2 border-accent-1 shadow-xs" />
+                  <div className="absolute -left-2 top-[54px] -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-card border-2 border-accent-1 shadow-xs" />
                   {/* Right Connection Handle */}
-                  <div className="absolute -right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-card border-2 border-accent-2 shadow-xs" />
+                  <div className="absolute -right-2 top-[54px] -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-card border-2 border-accent-2 shadow-xs" />
 
                   {/* Top Row: Icon + Category + Enable Toggle Switch */}
                   <div className="flex items-center justify-between gap-2 mb-2">
@@ -865,11 +866,11 @@ export default function AutomationPipelinePage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
             {nodes.map(node => (
               <div
                 key={node.id}
-                className={`rounded-2xl border p-4 bg-card shadow-xs transition-all ${
+                className={`rounded-2xl border p-4 bg-card shadow-xs transition-all flex flex-col justify-between h-full min-h-[150px] ${
                   node.enabled
                     ? 'border-border/80 hover:border-accent-1/40 hover:shadow-sm'
                     : 'opacity-65 border-border/50 bg-card/70'

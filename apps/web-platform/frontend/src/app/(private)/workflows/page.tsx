@@ -381,7 +381,7 @@ export default function WorkflowsPage() {
               <div key={stage.id} className="space-y-2">
                 <div
                   onClick={() => setSelectedStageId(stage.id)}
-                  className={`flex cursor-pointer items-center justify-between gap-4 rounded-2xl border p-4 transition-all ${
+                  className={`flex min-h-[82px] cursor-pointer items-center justify-between gap-4 rounded-2xl border p-4 transition-all ${
                     isSelected
                       ? 'border-accent-1 bg-accent-1/10 shadow-sm'
                       : isRunning
@@ -492,7 +492,7 @@ export default function WorkflowsPage() {
         </div>
 
         {/* Right Column: Inspector & Logs */}
-        <div className="space-y-5">
+        <div className="space-y-5 lg:sticky lg:top-6 lg:self-start lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
           {/* Node Inspector */}
           <div className="rounded-panel border border-accent-1/20 bg-card p-5 shadow-sm">
             <div className="flex items-center justify-between border-b border-accent-1/10 pb-3 mb-4">

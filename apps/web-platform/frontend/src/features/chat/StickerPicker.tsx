@@ -1,116 +1,85 @@
 'use client'
 
 import { useState } from 'react'
-import { Search, X, Smile, Heart, Laugh, Sparkles, type LucideIcon } from 'lucide-react'
+import {
+  Search,
+  X,
+  Smile,
+  Heart,
+  Laugh,
+  Sparkles,
+  Flame,
+  Sun,
+  Moon,
+  Coffee,
+  Gift,
+  Music,
+  Star,
+  Zap,
+  ThumbsUp,
+  Send,
+  ShieldCheck,
+  Compass,
+  Key,
+  Bookmark,
+  Bell,
+  Crown,
+  Gem,
+  Rocket,
+  type LucideIcon,
+} from 'lucide-react'
 
 interface Sticker {
   id: string
+  name: string
   emoji: string
   category: string
+  icon: LucideIcon
   tags: string[]
 }
 
 interface StickerPickerProps {
-  onStickerSelect: (sticker: Sticker) => void
+  onStickerSelect: (sticker: { id: string; emoji: string; category: string; tags: string[] }) => void
   onClose: () => void
 }
 
 const stickers: Sticker[] = [
+  // Love & Affection
+  { id: '1', name: 'Love Heart', emoji: '[Heart]', category: 'Love', icon: Heart, tags: ['love', 'heart', 'care'] },
+  { id: '2', name: 'Sparkles', emoji: '[Sparkles]', category: 'Love', icon: Sparkles, tags: ['sparkle', 'magic', 'shine'] },
+  { id: '3', name: 'Warm Hug', emoji: '[Warm Hug]', category: 'Love', icon: Flame, tags: ['hug', 'warm', 'flame'] },
+  { id: '4', name: 'Sweet Crown', emoji: '[Crown]', category: 'Love', icon: Crown, tags: ['queen', 'king', 'crown'] },
+  { id: '5', name: 'Precious Gem', emoji: '[Gem]', category: 'Love', icon: Gem, tags: ['gem', 'diamond', 'treasure'] },
+  { id: '6', name: 'Special Gift', emoji: '[Gift]', category: 'Love', icon: Gift, tags: ['gift', 'present', 'box'] },
+
   // Emotions
-  { id: '1', emoji: '😊', category: 'Emotions', tags: ['happy', 'smile', 'joy'] },
-  { id: '2', emoji: '😂', category: 'Emotions', tags: ['laugh', 'funny', 'lol'] },
-  { id: '3', emoji: '🥰', category: 'Emotions', tags: ['love', 'cute', 'adore'] },
-  { id: '4', emoji: '😍', category: 'Emotions', tags: ['love', 'heart', 'eyes'] },
-  { id: '5', emoji: '🤗', category: 'Emotions', tags: ['hug', 'cuddle', 'warm'] },
-  { id: '6', emoji: '😘', category: 'Emotions', tags: ['kiss', 'love', 'blow'] },
-  { id: '7', emoji: '😜', category: 'Emotions', tags: ['wink', 'playful', 'fun'] },
-  { id: '8', emoji: '🤩', category: 'Emotions', tags: ['star', 'amazed', 'wow'] },
-  { id: '9', emoji: '😎', category: 'Emotions', tags: ['cool', 'sunglasses', 'swag'] },
-  { id: '10', emoji: '🥳', category: 'Emotions', tags: ['party', 'celebrate', 'fun'] },
-  { id: '11', emoji: '😢', category: 'Emotions', tags: ['sad', 'cry', 'tear'] },
-  { id: '12', emoji: '😭', category: 'Emotions', tags: ['cry', 'sad', 'tears'] },
-  { id: '13', emoji: '😤', category: 'Emotions', tags: ['angry', 'mad', 'furious'] },
-  { id: '14', emoji: '🥺', category: 'Emotions', tags: ['puppy', 'eyes', 'sad'] },
-  { id: '15', emoji: '😴', category: 'Emotions', tags: ['sleep', 'tired', 'rest'] },
+  { id: '7', name: 'Happy Smile', emoji: '[Smile]', category: 'Emotions', icon: Smile, tags: ['happy', 'smile', 'joy'] },
+  { id: '8', name: 'Pure Joy', emoji: '[Laugh]', category: 'Emotions', icon: Laugh, tags: ['laugh', 'funny', 'fun'] },
+  { id: '9', name: 'Sunshine', emoji: '[Sun]', category: 'Emotions', icon: Sun, tags: ['sun', 'bright', 'morning'] },
+  { id: '10', name: 'Peaceful Moon', emoji: '[Moon]', category: 'Emotions', icon: Moon, tags: ['night', 'sleep', 'rest'] },
+  { id: '11', name: 'Star Glow', emoji: '[Star]', category: 'Emotions', icon: Star, tags: ['star', 'favorite', 'bright'] },
+  { id: '12', name: 'High Energy', emoji: '[Zap]', category: 'Emotions', icon: Zap, tags: ['energy', 'lightning', 'fast'] },
 
-  // Love
-  { id: '16', emoji: '❤️', category: 'Love', tags: ['heart', 'love', 'red'] },
-  { id: '17', emoji: '💕', category: 'Love', tags: ['hearts', 'love', 'pink'] },
-  { id: '18', emoji: '💖', category: 'Love', tags: ['sparkle', 'heart', 'love'] },
-  { id: '19', emoji: '💗', category: 'Love', tags: ['heart', 'love', 'grow'] },
-  { id: '20', emoji: '💘', category: 'Love', tags: ['arrow', 'heart', 'love'] },
-  { id: '21', emoji: '💝', category: 'Love', tags: ['ribbon', 'heart', 'gift'] },
-  { id: '22', emoji: '💞', category: 'Love', tags: ['hearts', 'love', 'revolving'] },
-  { id: '23', emoji: '💓', category: 'Love', tags: ['heartbeat', 'love', 'pulse'] },
-  { id: '24', emoji: '💙', category: 'Love', tags: ['blue', 'heart', 'love'] },
-  { id: '25', emoji: '💚', category: 'Love', tags: ['green', 'heart', 'love'] },
-  { id: '26', emoji: '💛', category: 'Love', tags: ['yellow', 'heart', 'love'] },
-  { id: '27', emoji: '💜', category: 'Love', tags: ['purple', 'heart', 'love'] },
-  { id: '28', emoji: '💌', category: 'Love', tags: ['letter', 'love', 'mail'] },
-  { id: '29', emoji: '💏', category: 'Love', tags: ['kiss', 'love', 'couple'] },
-  { id: '30', emoji: '💑', category: 'Love', tags: ['couple', 'love', 'together'] },
-
-  // Funny
-  { id: '31', emoji: '🤣', category: 'Funny', tags: ['laugh', 'rofl', 'funny'] },
-  { id: '32', emoji: '😹', category: 'Funny', tags: ['cat', 'laugh', 'funny'] },
-  { id: '33', emoji: '🤪', category: 'Funny', tags: ['zany', 'funny', 'crazy'] },
-  { id: '34', emoji: '😜', category: 'Funny', tags: ['wink', 'tongue', 'funny'] },
-  { id: '35', emoji: '🤭', category: 'Funny', tags: ['giggle', 'funny', 'shy'] },
-  { id: '36', emoji: '🫠', category: 'Funny', tags: ['melting', 'funny', 'mood'] },
-  { id: '37', emoji: '🫢', category: 'Funny', tags: ['facepalm', 'funny', 'oops'] },
-  { id: '38', emoji: '🫣', category: 'Funny', tags: ['peek', 'funny', 'shy'] },
-  { id: '39', emoji: '🫡', category: 'Funny', tags: ['salute', 'funny', 'respect'] },
-  { id: '40', emoji: '🤠', category: 'Funny', tags: ['cowboy', 'funny', 'hat'] },
-  { id: '41', emoji: '🥸', category: 'Funny', tags: ['disguise', 'funny', 'glasses'] },
-  { id: '42', emoji: '🤡', category: 'Funny', tags: ['clown', 'funny', 'circus'] },
-  { id: '43', emoji: '👻', category: 'Funny', tags: ['ghost', 'funny', 'spooky'] },
-  { id: '44', emoji: '💀', category: 'Funny', tags: ['skull', 'funny', 'dead'] },
-  { id: '45', emoji: '🤖', category: 'Funny', tags: ['robot', 'funny', 'tech'] },
-
-  // Animals
-  { id: '46', emoji: '🐱', category: 'Animals', tags: ['cat', 'kitten', 'pet'] },
-  { id: '47', emoji: '🐶', category: 'Animals', tags: ['dog', 'puppy', 'pet'] },
-  { id: '48', emoji: '🐰', category: 'Animals', tags: ['rabbit', 'bunny', 'cute'] },
-  { id: '49', emoji: '🐻', category: 'Animals', tags: ['bear', 'cute', 'teddy'] },
-  { id: '50', emoji: '🦊', category: 'Animals', tags: ['fox', 'cute', 'orange'] },
-  { id: '51', emoji: '🐼', category: 'Animals', tags: ['panda', 'cute', 'bamboo'] },
-  { id: '52', emoji: '🐨', category: 'Animals', tags: ['koala', 'cute', 'australia'] },
-  { id: '53', emoji: '🦁', category: 'Animals', tags: ['lion', 'king', 'roar'] },
-  { id: '54', emoji: '🐯', category: 'Animals', tags: ['tiger', 'stripes', 'wild'] },
-  { id: '55', emoji: '🐸', category: 'Animals', tags: ['frog', 'green', 'hop'] },
-  { id: '56', emoji: '🐵', category: 'Animals', tags: ['monkey', 'banana', 'fun'] },
-  { id: '57', emoji: '🦄', category: 'Animals', tags: ['unicorn', 'magic', 'rainbow'] },
-  { id: '58', emoji: '🦋', category: 'Animals', tags: ['butterfly', 'fly', 'beautiful'] },
-  { id: '59', emoji: '🐝', category: 'Animals', tags: ['bee', 'honey', 'buzz'] },
-  { id: '60', emoji: '🐞', category: 'Animals', tags: ['ladybug', 'red', 'cute'] },
-
-  // Celebration
-  { id: '61', emoji: '🎉', category: 'Celebration', tags: ['party', 'celebrate', 'confetti'] },
-  { id: '62', emoji: '🎊', category: 'Celebration', tags: ['party', 'celebrate', 'popper'] },
-  { id: '63', emoji: '🎈', category: 'Celebration', tags: ['balloon', 'party', 'fun'] },
-  { id: '64', emoji: '🎁', category: 'Celebration', tags: ['gift', 'present', 'box'] },
-  { id: '65', emoji: '🎂', category: 'Celebration', tags: ['cake', 'birthday', 'candle'] },
-  { id: '66', emoji: '🎆', category: 'Celebration', tags: ['firework', 'celebrate', 'boom'] },
-  { id: '67', emoji: '🎇', category: 'Celebration', tags: ['sparkler', 'celebrate', 'light'] },
-  { id: '68', emoji: '🏆', category: 'Celebration', tags: ['trophy', 'winner', 'gold'] },
-  { id: '69', emoji: '🥇', category: 'Celebration', tags: ['gold', 'medal', 'first'] },
-  { id: '70', emoji: '🌟', category: 'Celebration', tags: ['star', 'sparkle', 'glow'] },
-  { id: '71', emoji: '✨', category: 'Celebration', tags: ['sparkles', 'magic', 'shine'] },
-  { id: '72', emoji: '🎵', category: 'Celebration', tags: ['music', 'note', 'song'] },
-  { id: '73', emoji: '🎶', category: 'Celebration', tags: ['music', 'notes', 'melody'] },
-  { id: '74', emoji: '🎤', category: 'Celebration', tags: ['microphone', 'sing', 'karaoke'] },
-  { id: '75', emoji: '🎸', category: 'Celebration', tags: ['guitar', 'music', 'rock'] },
+  // Everyday
+  { id: '13', name: 'Coffee Time', emoji: '[Coffee]', category: 'Everyday', icon: Coffee, tags: ['coffee', 'tea', 'cafe'] },
+  { id: '14', name: 'Favorite Melody', emoji: '[Music]', category: 'Everyday', icon: Music, tags: ['music', 'song', 'tune'] },
+  { id: '15', name: 'Sweet Send', emoji: '[Send]', category: 'Everyday', icon: Send, tags: ['send', 'letter', 'message'] },
+  { id: '16', name: 'Thumbs Up', emoji: '[Thumbs Up]', category: 'Everyday', icon: ThumbsUp, tags: ['good', 'yes', 'ok'] },
+  { id: '17', name: 'Adventure', emoji: '[Compass]', category: 'Everyday', icon: Compass, tags: ['explore', 'travel', 'trip'] },
+  { id: '18', name: 'Safe Guard', emoji: '[Shield]', category: 'Everyday', icon: ShieldCheck, tags: ['safe', 'protect', 'care'] },
+  { id: '19', name: 'Little Key', emoji: '[Key]', category: 'Everyday', icon: Key, tags: ['secret', 'key', 'lock'] },
+  { id: '20', name: 'Saved Memory', emoji: '[Bookmark]', category: 'Everyday', icon: Bookmark, tags: ['save', 'memory', 'keep'] },
+  { id: '21', name: 'Gentle Chime', emoji: '[Bell]', category: 'Everyday', icon: Bell, tags: ['alert', 'bell', 'ring'] },
+  { id: '22', name: 'To The Stars', emoji: '[Rocket]', category: 'Everyday', icon: Rocket, tags: ['rocket', 'launch', 'future'] },
 ]
 
-const categories = ['All', 'Emotions', 'Love', 'Funny', 'Animals', 'Celebration']
+const categories = ['All', 'Love', 'Emotions', 'Everyday']
 
 const categoryIcons: Record<string, LucideIcon> = {
   All: Sparkles,
-  Emotions: Smile,
   Love: Heart,
-  Funny: Laugh,
-  Animals: Heart,
-  Celebration: Sparkles,
+  Emotions: Smile,
+  Everyday: Coffee,
 }
 
 export default function StickerPicker({ onStickerSelect, onClose }: StickerPickerProps) {
@@ -120,7 +89,7 @@ export default function StickerPicker({ onStickerSelect, onClose }: StickerPicke
   const filteredStickers = stickers.filter((sticker) => {
     const matchesSearch = sticker.tags.some((tag) =>
       tag.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    ) || sticker.name.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategory === 'All' || sticker.category === selectedCategory
     return matchesSearch && matchesCategory
   })
@@ -181,17 +150,25 @@ export default function StickerPicker({ onStickerSelect, onClose }: StickerPicke
 
         {/* Sticker Grid */}
         <div className="flex-1 overflow-y-auto p-4">
-          <div className="grid grid-cols-5 gap-3">
-            {filteredStickers.map((sticker) => (
-              <button
-                key={sticker.id}
-                type="button"
-                onClick={() => onStickerSelect(sticker)}
-                className="aspect-square rounded-input border-2 border-accent-1/20 bg-card hover:border-accent-1/50 hover:bg-accent-1/10 transition flex items-center justify-center text-4xl"
-              >
-                {sticker.emoji}
-              </button>
-            ))}
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+            {filteredStickers.map((sticker) => {
+              const Icon = sticker.icon
+              return (
+                <button
+                  key={sticker.id}
+                  type="button"
+                  onClick={() => onStickerSelect(sticker)}
+                  className="aspect-square flex flex-col items-center justify-center gap-2 rounded-2xl border border-accent-1/20 bg-card/60 p-3 text-text-1 hover:border-accent-1 hover:bg-accent-1/10 hover:scale-105 active:scale-95 transition-all shadow-xs"
+                >
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-1/15 text-accent-1">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <span className="text-xs font-medium text-text-2 truncate max-w-full">
+                    {sticker.name}
+                  </span>
+                </button>
+              )
+            })}
           </div>
           {filteredStickers.length === 0 && (
             <div className="text-center py-8 text-text-2">

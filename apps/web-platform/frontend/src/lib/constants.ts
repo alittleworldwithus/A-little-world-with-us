@@ -9,8 +9,8 @@ export const LOVE_LANGUAGES = [
 ]
 
 export const CYCLE_PHASES = {
-  menstrual: { emoji: '🌑', name: 'Rest & Recharge' },
-  follicular: { emoji: '🌓', name: 'Energy Rising' },
-  ovulation: { emoji: '🌕', name: 'Peak Glow' },
-  luteal: { emoji: '🌗', name: 'Wind Down' },
+  menstrual: { phase: 'menstrual', name: 'Rest & Recharge' },
+  follicular: { phase: 'follicular', name: 'Energy Rising' },
+  ovulation: { phase: 'ovulation', name: 'Peak Glow' },
+  luteal: { phase: 'luteal', name: 'Wind Down' },
 }

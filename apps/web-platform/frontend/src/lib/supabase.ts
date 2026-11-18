@@ -89,8 +89,7 @@ export async function insertRow<T>(
   if (!isSupabaseConfigured) return null
 
   try {
-    // ❌ ဒီနေရာမှာ user_id ကို အလိုအလျောက် ထည့်ပေးနေတဲ့ code ကို ဖျက်လိုက်ပါပြီ။
-    // သက်ဆိုင်ရာ table ရဲ့ column တွေကို caller ကပဲ တိကျစွာ ထည့်ပေးရပါမယ်။
+    // Schema note: Column values must be provided accurately by caller.
     const { data, error } = await supabase.from(table).insert(payload).select()
     if (error) return null
 
@@ -145,7 +144,7 @@ export type Memory = {
   thumbnail_url?: string | null
 }
 
-// ✅ Message type ကို Actual Database Schema နဲ့ ကိုက်ညီအောင် ပြင်ထားပါတယ်။
+// Message type aligned with database schema.
 export type Message = {
   id: string
   created_at: string

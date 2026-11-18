@@ -115,6 +115,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="about" options={{ href: null }} />
       <Tabs.Screen name="terms" options={{ href: null }} />
       <Tabs.Screen name="watch-together" options={{ href: null }} />
+      <Tabs.Screen name="our-story" options={{ href: null }} />
     </Tabs>
   )
 }

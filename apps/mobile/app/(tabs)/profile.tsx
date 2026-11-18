@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -7,6 +7,7 @@ import { useTheme } from '@/context/ThemeContext'
 import type { ThemeColors } from '@/context/ThemeContext'
 import { sizes, type Sizes } from '@/design-tokens'
 import { useAuth } from '@/lib/auth'
+import { supabase } from '@/lib/supabase'
 
 export default function ProfileScreen() {
   const { colors } = useTheme()
@@ -14,6 +15,51 @@ export default function ProfileScreen() {
   const styles = useMemo(() => createStyles(colors, sizes, insets.top), [colors, insets.top])
   const { user, signOut } = useAuth()
   const [showBiometricAuth, setShowBiometricAuth] = useState(false)
+  const [coupleName, setCoupleName] = useState('Our World')
+
+  useEffect(() => {
+    let active = true
+    async function loadNames() {
+      if (!user) return
+      try {
+        const { data: myProf } = await supabase.from('profiles').select('full_name').eq('id', user.id).single()
+        const { data: link } = await supabase
+          .from('couple_links')
+          .select('couple_id, inviter_id, accepted_by, couples(name)')
+          .or(`inviter_id.eq.${user.id},accepted_by.eq.${user.id}`)
+          .eq('status', 'accepted')
+          .maybeSingle()
+
+        if (!active) return
+
+        const coupleData = link?.couples as { name?: string | null } | null
+        if (coupleData?.name?.trim()) {
+          setCoupleName(coupleData.name.trim())
+          return
+        }
+
+        const partnerId = link ? (link.inviter_id === user.id ? link.accepted_by : link.inviter_id) : null
+        let partnerName = ''
+        if (partnerId) {
+          const { data: pProf } = await supabase.from('profiles').select('full_name').eq('id', partnerId).maybeSingle()
+          partnerName = pProf?.full_name?.trim() || ''
+        }
+
+        const myName = myProf?.full_name?.trim() || ''
+        if (myName && partnerName) {
+          setCoupleName(`${myName} × ${partnerName}`)
+        } else if (myName) {
+          setCoupleName(myName)
+        }
+      } catch {
+        // Fallback to default
+      }
+    }
+    void loadNames()
+    return () => {
+      active = false
+    }
+  }, [user])
 
   const handleBiometricSuccess = () => {
     setShowBiometricAuth(false)
@@ -30,7 +76,7 @@ export default function ProfileScreen() {
       ) : (
         <>
           <Text style={styles.eyebrow}>Profile</Text>
-          <Text style={styles.title}>KoKo × Pu Tuu</Text>
+          <Text style={styles.title}>{coupleName}</Text>
           <Text style={styles.subtitle}>Shared home, secure memories, and quiet love rituals.</Text>
 
           <View style={styles.card}>

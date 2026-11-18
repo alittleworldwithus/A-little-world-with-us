@@ -67,7 +67,52 @@ export function createAstrologyProfile(birthDate: Date): AstrologyProfile {
   return { birthDate, westernSign, chineseSign, numerologyNumber }
 }
 
-export function calculateSynastry(profile1: AstrologyProfile, profile2: AstrologyProfile) {
+export function getDynamicHoroscope(sign: string, date = new Date()): string {
+  const elements: Record<string, string> = {
+    Aries: 'Fire',
+    Leo: 'Fire',
+    Sagittarius: 'Fire',
+    Taurus: 'Earth',
+    Virgo: 'Earth',
+    Capricorn: 'Earth',
+    Gemini: 'Air',
+    Libra: 'Air',
+    Aquarius: 'Air',
+    Cancer: 'Water',
+    Scorpio: 'Water',
+    Pisces: 'Water',
+  }
+  const element = elements[sign] || 'Air'
+  const themes: Record<string, string[]> = {
+    Fire: [
+      'မီးဓာတ်စွမ်းအားမြင့်မားနေသောကြောင့် ယနေ့တွင် ချစ်သူနှင့်အတူ အစီအစဉ်အသစ်များ အတူစတင်ရန် အလွန်သင့်လျော်သည်။ စကားပြောဆိုရာတွင် နွေးထွေးမှုကို အဓိကထားပါ။',
+      'စိတ်အားထက်သန်မှုပြည့်ဝနေသည့်နေ့ဖြစ်ပြီး နှစ်ဦးကြား နားလည်မှုကို ပိုမိုခိုင်မာစေမည့် အခွင့်အရေးများ ရရှိပါမည်။ ချိုမြိန်သောစကားများ မျှဝေပါ။',
+      'ယနေ့တွင် သင့်ရဲ့ တက်ကြွမှုနှင့် အကောင်းမြင်စိတ်က ချစ်သူကိုပါ စိတ်လက်ချမ်းသာမှု ဖြစ်စေပါလိမ့်မည်။',
+    ],
+    Earth: [
+      'မြေဓာတ်တည်ငြိမ်မှု အပြည့်ရှိသောကြောင့် လက်တွေ့ကျသော အနာဂတ်အစီအစဉ်များနှင့် အစီအမံများအတွက် ကောင်းမွန်သောနေ့ဖြစ်ပါသည်။',
+      'နှစ်ဦးသဘောတူ ဆုံးဖြတ်ချက်များ ခိုင်မာစေပြီး အချင်းချင်းအပေါ် အားကိုးယုံကြည်စိတ် ပိုမိုတိုးပွားစေပါမည်။',
+      'အေးဆေးတည်ငြိမ်စွာ ချစ်ခြင်းမေတ္တာကို ဖော်ပြပြီး အတူတူ နွေးထွေးသော အချိန်များကို ဖြတ်သန်းပါ။',
+    ],
+    Air: [
+      'လေဓာတ် ဆက်သွယ်ရေးကောင်းမွန်သောနေ့ဖြစ်ပြီး နှလုံးသားချင်း စကားပြောဆိုမှုများနှင့် အမှတ်တရများကို မျှဝေရန် အကောင်းဆုံးဖြစ်ပါသည်။',
+      'စိတ်ကူးစိတ်သန်းသစ်များ ပေါ်ပေါက်လာပြီး အတူတကွ သွားလာလည်ပတ်စရာ နေရာသစ်များ စဉ်းစားနိုင်ပါသည်။',
+      'ပွင့်လင်းရိုးသားသော နားထောင်မှုဖြင့် ချစ်သူ၏ ခံစားချက်ကို အပြည့်အဝ နားလည်ဖေးမပေးနိုင်ပါမည်။',
+    ],
+    Water: [
+      'ရေဓာတ်ခံစားချက်နက်ရှိုင်းနေသည့်နေ့ဖြစ်ပြီး သိမ်မွေ့နူးညံ့သော ဂရုစိုက်မှုများက ဆက်ဆံရေးကို အထူးလှပစေပါမည်။',
+      'အပြန်အလှန် စာနာနားလည်မှုနှင့် စိတ်ခံစားချက်မျှဝေမှုများက သင့်တို့နှစ်ဦးကို ပိုမိုနီးကပ်စေပါလိမ့်မည်။',
+      'ယနေ့တွင် ချစ်သူအတွက် သေးငယ်သော်လည်း အဓိပ္ပာယ်ရှိသော မေတ္တာလက်ဆောင်လေးများ ပြုလုပ်ပေးပါ။',
+    ],
+  }
+  const dayOfYear = Math.floor(
+    (date.getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / 86_400_000
+  )
+  const signIndex = westernSigns.indexOf(sign as (typeof westernSigns)[number])
+  const pool = themes[element] ?? themes.Air
+  const pick = Math.abs(dayOfYear + (signIndex >= 0 ? signIndex : 0)) % pool.length
+  return pool[pick]
+}
   const elements: Record<string, string> = {
     Aries: 'Fire',
     Leo: 'Fire',

@@ -4,19 +4,53 @@ import { memo, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Heart } from 'lucide-react'
 import { calculateDaysTogether, getRelationshipStartDate } from '@/lib/relationship-days'
+import { getCoupleStatus } from '@/lib/couples'
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion'
+
+interface DaysCounterProps {
+  anniversary?: string | null
+}
 
 /**
  * Displays total days together since the anniversary date.
  * Includes a pulsing heart animation.
  */
-export default memo(function DaysCounter() {
+export default memo(function DaysCounter({ anniversary: propAnniversary }: DaysCounterProps = {}) {
   const [days, setDays] = useState(0)
+  const [anniversaryDate, setAnniversaryDate] = useState<string>(propAnniversary ?? '')
   const prefersReduced = usePrefersReducedMotion()
 
   useEffect(() => {
-    setDays(calculateDaysTogether())
-  }, [])
+    let isMounted = true
+
+    async function loadDate() {
+      if (propAnniversary) {
+        setAnniversaryDate(propAnniversary)
+        setDays(calculateDaysTogether(new Date(), propAnniversary))
+        return
+      }
+      try {
+        const { couple } = await getCoupleStatus()
+        if (isMounted && couple?.anniversary) {
+          setAnniversaryDate(couple.anniversary)
+          setDays(calculateDaysTogether(new Date(), couple.anniversary))
+          return
+        }
+      } catch {
+        // Fallback below
+      }
+      if (isMounted) {
+        const fallback = getRelationshipStartDate()
+        setAnniversaryDate(fallback)
+        setDays(calculateDaysTogether(new Date(), fallback))
+      }
+    }
+
+    void loadDate()
+    return () => {
+      isMounted = false
+    }
+  }, [propAnniversary])
 
   return (
     <motion.div
@@ -35,7 +69,9 @@ export default memo(function DaysCounter() {
       </motion.div>
 
       <h2 className="font-dancing text-3xl text-accent-2 mb-1">Days Together</h2>
-      <p className="text-xs opacity-60 mb-6 uppercase tracking-widest">Since {getRelationshipStartDate()}</p>
+      <p className="text-xs opacity-60 mb-6 uppercase tracking-widest">
+        {anniversaryDate ? `Since ${anniversaryDate}` : `Since ${getRelationshipStartDate()}`}
+      </p>
 
       <div className="flex items-center justify-center gap-3">
         <motion.span

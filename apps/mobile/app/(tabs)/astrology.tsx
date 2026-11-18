@@ -6,7 +6,7 @@ import { useTheme } from '@/context/ThemeContext'
 import type { ThemeColors } from '@/context/ThemeContext'
 import { sizes, type Sizes } from '@/design-tokens'
 import { supabase } from '@/lib/supabase'
-import { calculateSynastry, createAstrologyProfile } from '@/services/astrology'
+import { calculateSynastry, createAstrologyProfile, getDynamicHoroscope } from '@/services/astrology'
 import { moonPhase } from '@/services/secondary'
 
 const signs = [
@@ -62,18 +62,18 @@ export default function AstrologyScreen() {
       const { data, error } = await supabase.functions.invoke('ai-horoscope', {
         body: { sign, language: 'my' },
       })
-      if (error) throw error
-      setAdvice(
-        typeof data === 'string'
-          ? data
-          : (data?.horoscope ?? data?.advice ?? 'Today is a good day to listen with care.')
-      )
-    } catch (error_) {
-      Alert.alert(
-        'Horoscope unavailable',
-        error_ instanceof Error ? error_.message : 'Please try again.'
-      )
+      if (!error && data) {
+        setAdvice(
+          typeof data === 'string'
+            ? data
+            : (data?.horoscope ?? data?.advice ?? getDynamicHoroscope(sign))
+        )
+        return
+      }
+    } catch {
+      // Fall through to dynamic astrological horoscope
     }
+    setAdvice(getDynamicHoroscope(sign))
   }
   return (
     <SecondaryPage title="Astrology">

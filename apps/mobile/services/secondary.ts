@@ -75,7 +75,15 @@ export async function getCapsules(coupleId: string) {
     .eq('couple_id', coupleId)
     .order('unlock_at')
   if (error) throw new Error(error.message)
-  return data ?? []
+  const now = new Date()
+  return (data ?? []).map((capsule) => {
+    const isLocked = new Date(capsule.unlock_at) > now
+    if (isLocked) {
+      // Do not expose locked secret content in client memory before unlock date
+      return { ...capsule, content: '' }
+    }
+    return capsule
+  })
 }
 export async function addCapsule(
   coupleId: string,

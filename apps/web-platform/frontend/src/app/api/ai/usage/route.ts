@@ -1,8 +1,38 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
+import { createClient } from '@supabase/supabase-js'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    if (!supabaseUrl || !supabaseAnonKey) {
+      return NextResponse.json({ error: 'Auth not configured' }, { status: 500 })
+    }
+
+    const supabase = createServerClient(
+      supabaseUrl,
+      supabaseAnonKey,
+      { cookies: { getAll: () => req.cookies.getAll(), setAll: () => {} } }
+    )
+    const { data: { user: cookieUser } } = await supabase.auth.getUser()
+    const bearer = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '')
+    const tokenClient = bearer
+      ? createClient(supabaseUrl, supabaseAnonKey)
+      : null
+    const { data: { user: tokenUser } } = tokenClient && bearer
+      ? await tokenClient.auth.getUser(bearer)
+      : { data: { user: null } }
+    const user = cookieUser ?? tokenUser
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const env = process.env
 
   const providersConfig = {

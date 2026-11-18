@@ -50,19 +50,24 @@ const sections = [
   },
   {
     title: 'Memories',
-    items: [{ href: '/(tabs)/memories', key: 'ourMemories', Icon: HeartPulse }],
+    items: [
+      { href: '/(tabs)/memories', key: 'ourMemories', Icon: HeartPulse },
+      { href: '/(tabs)/our-story', key: 'ourStory', Icon: HeartPulse },
+    ],
   },
   {
     title: 'Connection',
     items: [
       { href: '/(tabs)/chat', key: 'chat', Icon: Phone },
       { href: '/(tabs)/calls', key: 'calls', Icon: Phone },
+      { href: '/(tabs)/couple-linking', key: 'coupleLinking', Icon: Users },
       { href: '/(tabs)/location', key: 'locationSafety', Icon: MapPin },
     ],
   },
   {
     title: 'Care and Play',
     items: [
+      { href: '/(tabs)/ai', key: 'aiAssistant', Icon: Sparkles },
       { href: '/(tabs)/wellness', key: 'wellness', Icon: HeartPulse },
       { href: '/(tabs)/music', key: 'music', Icon: Music2 },
       { href: '/(tabs)/learning', key: 'learning', Icon: Languages },
@@ -105,7 +110,7 @@ export default function MoreScreen() {
         .or(`inviter_id.eq.${user.id},accepted_by.eq.${user.id}`)
         .eq('status', 'accepted')
         .maybeSingle()
-      if (active) setCanViewLocation(link?.inviter_id === user.id)
+      if (active) setCanViewLocation(Boolean(link))
     })
     return () => {
       active = false

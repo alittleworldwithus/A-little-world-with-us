@@ -47,7 +47,6 @@ export default function CoupleLinkingPage() {
 
   useRealtimeSync<{ status: CoupleLinkStatus; invite_code?: string | null; updated_at?: string | null }>({
     table: 'couple_links',
-    filter: currentUserId ? `inviter_id=eq.${currentUserId}` : undefined,
     onChange: (row) => {
       const nextStatus = row.status
       setInviteCode((previousCode) => row.invite_code ?? previousCode)
@@ -61,7 +60,7 @@ export default function CoupleLinkingPage() {
       if (status) {
         setInviteCode(status.inviteCode ?? '')
         setLastStatusUpdatedAt((current) => current ?? new Date().toISOString())
-        setState(status.status === 'accepted' ? 'linked' : 'pending')
+        setState(status.status === 'accepted' ? 'linked' : status.status === 'pending' ? 'pending' : 'create')
       } else {
         setState('create')
       }

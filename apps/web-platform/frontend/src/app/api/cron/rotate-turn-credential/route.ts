@@ -8,6 +8,7 @@ import {
   promotePendingMeteredCredential,
   type MeteredTurnCredential,
 } from '@/lib/metered-turn'
+import { isAuthorizedCronRequest } from '../_lib/cronAuth'
 
 export const runtime = 'nodejs'
 export const maxDuration = 30
@@ -18,7 +19,7 @@ export async function GET(request: Request) {
   if (!cronSecret) {
     return NextResponse.json({ error: 'Cron is not configured.' }, { status: 503 })
   }
-  if (request.headers.get('authorization') !== `Bearer ${cronSecret}`) {
+  if (!isAuthorizedCronRequest(request)) {
     return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 })
   }
 

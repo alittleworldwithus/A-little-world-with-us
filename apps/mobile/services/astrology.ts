@@ -113,6 +113,8 @@ export function getDynamicHoroscope(sign: string, date = new Date()): string {
   const pick = Math.abs(dayOfYear + (signIndex >= 0 ? signIndex : 0)) % pool.length
   return pool[pick]
 }
+
+export function calculateSynastry(profile1: AstrologyProfile, profile2: AstrologyProfile): number {
   const elements: Record<string, string> = {
     Aries: 'Fire',
     Leo: 'Fire',

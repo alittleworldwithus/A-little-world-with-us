@@ -4,7 +4,7 @@
 Designed for automated production pipelines and containerless deployments (systemd / PM2).
 Features:
 - Pre-flight PostgreSQL / Supabase connectivity check with exponential backoff.
-- Executes sequential bootstrap SQL files (00_core.sql through 55_*.sql) from apps/web-platform/backend/supabase/bootstrap.
+- Executes the canonical bootstrap SQL and timestamped follow-up migrations.
 - Transactional execution with advisory lock protection to prevent race conditions during deployments.
 - Maintains `alw_schema_migrations` tracking table for idempotent replays.
 - Non-zero exit code on failure to prevent deployment of broken states.
@@ -20,13 +20,15 @@ def log(msg: str) -> None:
     print(f"[ALW-Migrate] {time.strftime('%Y-%m-%d %H:%M:%S')} - {msg}", flush=True)
 
 
-def get_bootstrap_dir() -> Path:
+def get_migration_dirs() -> list[Path]:
     repo_root = Path(__file__).resolve().parent.parent
-    bootstrap_dir = repo_root / "backend" / "supabase" / "bootstrap"
-    if not bootstrap_dir.exists():
-        log(f"ERROR: Bootstrap SQL directory not found: {bootstrap_dir}")
+    supabase_dir = repo_root / "apps" / "web-platform" / "backend" / "supabase"
+    bootstrap_dir = supabase_dir / "bootstrap"
+    migrations_dir = supabase_dir / "migrations"
+    if not bootstrap_dir.exists() or not migrations_dir.exists():
+        log(f"ERROR: Supabase SQL directories not found below: {supabase_dir}")
         sys.exit(1)
-    return bootstrap_dir
+    return [bootstrap_dir, migrations_dir]
 
 
 def wait_for_database(dsn: str, max_retries: int = 15, delay: float = 2.0) -> bool:
@@ -63,9 +65,14 @@ def run_migrations(dsn: str) -> bool:
     except ImportError:
         import psycopg2 as psycopg
 
-    bootstrap_dir = get_bootstrap_dir()
-    sql_files = sorted([f for f in bootstrap_dir.glob("*.sql") if f.is_file()])
-    log(f"Found {len(sql_files)} schema migration scripts in {bootstrap_dir}")
+    migration_dirs = get_migration_dirs()
+    sql_files = [
+        sql_file
+        for directory in migration_dirs
+        for sql_file in sorted(directory.glob("*.sql"))
+        if sql_file.is_file()
+    ]
+    log(f"Found {len(sql_files)} schema migration scripts in {', '.join(str(path) for path in migration_dirs)}")
 
     try:
         with psycopg.connect(dsn) as conn:
@@ -84,7 +91,11 @@ def run_migrations(dsn: str) -> bool:
                 applied = {row[0] for row in cur.fetchall()}
 
                 for sql_file in sql_files:
-                    if sql_file.name in applied:
+                    migration_key = f"{sql_file.parent.name}/{sql_file.name}"
+                    # Older versions of this runner recorded only the filename.
+                    # Honour that record so upgrading the runner never replays a
+                    # previously applied production schema script.
+                    if migration_key in applied or sql_file.name in applied:
                         continue
 
                     log(f"Applying migration: {sql_file.name}...")
@@ -92,7 +103,7 @@ def run_migrations(dsn: str) -> bool:
                     cur.execute(sql_content)
                     cur.execute(
                         "INSERT INTO alw_schema_migrations (migration_name) VALUES (%s)",
-                        (sql_file.name,),
+                        (migration_key,),
                     )
                     conn.commit()
                     log(f"  \u2713 {sql_file.name} applied successfully.")

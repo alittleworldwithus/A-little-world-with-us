@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getCronJobSecretHeaders } from '@/app/api/cron/_lib/cronAuth'
+import { getCronJobSecretHeaders, isAuthorizedCronRequest } from '@/app/api/cron/_lib/cronAuth'
 
 type CronRequestValidation =
   | { ok: true; supabaseUrl: string; serviceRole: string }
@@ -17,7 +17,7 @@ export function validateCronRequest(request: Request): CronRequestValidation {
     }
   }
 
-  if (request.headers.get('authorization') !== `Bearer ${cronSecret}`) {
+  if (!isAuthorizedCronRequest(request)) {
     return {
       ok: false,
       response: NextResponse.json({ error: 'Unauthorized' }, { status: 401 }),

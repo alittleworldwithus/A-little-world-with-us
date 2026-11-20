@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import { NextResponse, type NextRequest } from 'next/server'
 import type { PushSubscription, WebPushError } from 'web-push'
 import { configureWebPush } from '@/lib/web-push-server'
+import { isAuthorizedCronRequest } from '../_lib/cronAuth'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
@@ -30,7 +31,7 @@ export async function GET(req: NextRequest) {
   if (!cronSecret) {
     return NextResponse.json({ error: 'Cron is not configured.' }, { status: 503 })
   }
-  if (req.headers.get('authorization') !== `Bearer ${cronSecret}`) {
+  if (!isAuthorizedCronRequest(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

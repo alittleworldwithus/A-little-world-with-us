@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { getCronJobSecretHeaders } from './cronAuth'
+import { getCronJobSecretHeaders, isAuthorizedCronRequest } from './cronAuth'
 
 afterEach(() => { vi.unstubAllEnvs() })
 
@@ -17,5 +17,11 @@ describe('getCronJobSecretHeaders', () => {
     vi.stubEnv('CRON_SECRET', '')
     vi.stubEnv('JOB_SECRET', 'job-value')
     expect(getCronJobSecretHeaders()).toEqual({ 'x-job-secret': 'job-value' })
+  })
+  it('only accepts the exact bearer credential', () => {
+    vi.stubEnv('CRON_SECRET', 'expected')
+    expect(isAuthorizedCronRequest(new Request('https://example.test', { headers: { authorization: 'Bearer expected' } }))).toBe(true)
+    expect(isAuthorizedCronRequest(new Request('https://example.test', { headers: { authorization: 'Bearer expected-extra' } }))).toBe(false)
+    expect(isAuthorizedCronRequest(new Request('https://example.test', { headers: { authorization: 'Basic expected' } }))).toBe(false)
   })
 })

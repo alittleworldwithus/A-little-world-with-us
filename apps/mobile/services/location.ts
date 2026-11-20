@@ -220,21 +220,20 @@ export async function startLocationTracking(onUpdate?: (point: LocationPoint) =>
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (user) {
-    const { error } = await supabase.from('location_sharing_settings').upsert(
-      {
-        user_id: user.id,
-        enabled: true,
-        last_permission_state: 'granted',
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: 'user_id' }
+  if (!user) throw new Error('Sign in before enabling location sharing.')
+  const { error } = await supabase.from('location_sharing_settings').upsert(
+    {
+      user_id: user.id,
+      enabled: true,
+      last_permission_state: 'granted',
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: 'user_id' }
+  )
+  if (error)
+    throw new Error(
+      'Could not save your location-sharing consent. Run the latest Supabase bootstrap first.'
     )
-    if (error)
-      throw new Error(
-        'Could not save your location-sharing consent. Run the latest Supabase bootstrap first.'
-      )
-  }
   await AsyncStorage.setItem(SHARING_KEY, 'true')
   await saveStatus({ enabled: true, permission: 'granted' })
   const { movingInterval, stationaryInterval } = await chooseLocationCadence()

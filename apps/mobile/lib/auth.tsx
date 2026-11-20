@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router'
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 
 import { supabase } from './supabase'
+import { stopLocationTracking } from '@/services/location'
 
 type AuthContextType = {
   user: User | null
@@ -59,8 +60,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const signOut = async () => {
-    await supabase.auth.signOut()
-    router.push('/login')
+    try {
+      // Stop background tracking before removing the session so a signed-out
+      // device cannot continue collecting location updates.
+      await stopLocationTracking()
+    } finally {
+      await supabase.auth.signOut()
+      router.push('/login')
+    }
   }
 
   return <AuthContext.Provider value={{ user, loading, signOut }}>{children}</AuthContext.Provider>

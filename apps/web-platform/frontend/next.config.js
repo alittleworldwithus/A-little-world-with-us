@@ -80,6 +80,14 @@ const nextConfig = {
             value: '1; mode=block',
           },
           {
+            // Keep a pragmatic policy for the current first-party app while
+            // preventing plugin/object injection and unwanted embedding. The
+            // external media and provider list is intentionally explicit so a
+            // future integration must be reviewed before it can execute.
+            key: 'Content-Security-Policy',
+            value: "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://telegram.org; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; media-src 'self' blob: data: https:; font-src 'self' data:; connect-src 'self' https: wss:; frame-src 'self' https://www.youtube.com; worker-src 'self' blob:",
+          },
+          {
             key: 'Strict-Transport-Security',
             value: 'max-age=31536000; includeSubDomains',
           },

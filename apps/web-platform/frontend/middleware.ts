@@ -2,6 +2,11 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+export function isLocalDevelopmentRequest(hostname: string, nodeEnv: string | undefined): boolean {
+  if (nodeEnv !== 'development') return false
+  return hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1'
+}
+
 // Middleware to protect dashboard routes and check onboarding status.
 // Uses Supabase server session verification for secure authentication.
 
@@ -52,15 +57,9 @@ export async function middleware(request: NextRequest) {
     return supabaseResponse
   }
 
-  // Allow local preview testing without live Supabase session
-  const isLocalPreview =
-    request.nextUrl.hostname === 'localhost' ||
-    request.nextUrl.hostname === '127.0.0.1' ||
-    request.cookies.get('alittleworld_preview')?.value === 'true' ||
-    request.headers.get('x-alittleworld-preview') === 'true' ||
-    request.nextUrl.searchParams.get('preview') === 'true'
-
-  if (isLocalPreview) {
+  // Development preview is permitted only on a local loopback host. Never
+  // trust a user-controlled cookie, header or query value to bypass auth.
+  if (isLocalDevelopmentRequest(request.nextUrl.hostname, process.env.NODE_ENV)) {
     return supabaseResponse
   }
 

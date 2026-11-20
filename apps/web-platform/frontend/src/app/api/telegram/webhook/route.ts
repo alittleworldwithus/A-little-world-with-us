@@ -144,10 +144,6 @@ export async function POST(req: Request) {
     const receivedTopicId = sourceMessage?.message_thread_id
     console.warn('[Telegram:OurWorld:Webhook] update rejected by group/topic scope.', {
       updateKind: update.message ? 'message' : update.callback_query ? 'callback_query' : 'unknown',
-      receivedChatId: receivedChatId ?? null,
-      receivedTopicId: receivedTopicId ?? null,
-      expectedChatId,
-      expectedTopicId,
       chatMatches: receivedChatId !== undefined && String(receivedChatId) === expectedChatId,
       topicMatches: receivedTopicId !== undefined && String(receivedTopicId) === expectedTopicId,
     })

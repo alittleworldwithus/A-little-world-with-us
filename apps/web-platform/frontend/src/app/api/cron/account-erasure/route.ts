@@ -2,13 +2,14 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { createAdminClient, writeAdminAudit } from '@/lib/admin'
 import { logEvent } from '@/lib/observability'
 import { disconnectDrive } from '@/lib/google-drive'
+import { isAuthorizedCronRequest } from '../_lib/cronAuth'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
 
 export async function GET(req: NextRequest) {
   const secret = process.env.CRON_SECRET
-  if (!secret || req.headers.get('authorization') !== `Bearer ${secret}`) {
+  if (!secret || !isAuthorizedCronRequest(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

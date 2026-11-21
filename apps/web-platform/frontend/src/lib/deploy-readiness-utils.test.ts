@@ -26,6 +26,7 @@ describe('deploy readiness smoke-test helpers', () => {
   })
 
   it('keeps the preflight shell script syntactically valid', () => {
+    if (process.platform === 'win32') return
     const script = resolve(process.cwd(), '../../../scripts/preflight-deploy.sh')
     if (!existsSync(script)) return
     const result = spawnSync('bash', ['-n', script], { encoding: 'utf8' })

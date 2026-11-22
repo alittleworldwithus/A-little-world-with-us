@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import LittleWorldLogo from '@/components/shared/LittleWorldLogo'
 import ThemeToggle from '@/components/shared/ThemeToggle'
+import { NexusAppSwitcher } from '@/components/NexusAppSwitcher'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { supabase } from '@/lib/supabase'
 import { removeBrowserPushSubscription } from '@/lib/notifications'
@@ -178,6 +179,10 @@ export default function Sidebar() {
         <p className="text-xs italic leading-relaxed text-text-1">
           “{t('nav.sidebarQuote')}”
         </p>
+      </div>
+
+      <div className="mt-3 px-2">
+        <NexusAppSwitcher currentAppId="alittleworld" />
       </div>
 
       <div className="mt-4 px-2">

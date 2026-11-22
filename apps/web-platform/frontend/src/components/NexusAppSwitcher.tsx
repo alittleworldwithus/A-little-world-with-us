@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { LayoutGrid, ExternalLink, ShieldCheck, Sparkles, ChevronDown } from 'lucide-react';
 
 interface AppInfo {
@@ -79,15 +80,27 @@ export function NexusAppSwitcher({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLocal, setIsLocal] = useState(false);
+  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
+  const [mounted, setMounted] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setMounted(true);
     if (typeof window !== 'undefined') {
-      setIsLocal(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      setIsLocal(
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1'
+      );
     }
 
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -95,11 +108,116 @@ export function NexusAppSwitcher({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Calculate fixed position relative to the button on screen
+  useEffect(() => {
+    if (isOpen && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      const DROPDOWN_WIDTH = 320;
+      // Align right edge of dropdown with right edge of button, but clamp to viewport
+      const left = Math.max(8, rect.right - DROPDOWN_WIDTH);
+
+      if (dropdownPosition === 'top') {
+        setDropdownStyle({
+          position: 'fixed',
+          bottom: window.innerHeight - rect.top + 8,
+          left,
+          width: DROPDOWN_WIDTH,
+          zIndex: 9999,
+        });
+      } else {
+        setDropdownStyle({
+          position: 'fixed',
+          top: rect.bottom + 8,
+          left,
+          width: DROPDOWN_WIDTH,
+          zIndex: 9999,
+        });
+      }
+    }
+  }, [isOpen, dropdownPosition]);
+
+  const dropdownPanel = (
+    <div
+      ref={dropdownRef}
+      style={dropdownStyle}
+      className="bg-card/95 backdrop-blur-xl border border-rose-500/30 rounded-2xl shadow-2xl p-3 animate-in fade-in zoom-in-95 duration-150"
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between pb-2 mb-2 border-b border-border/60 px-1">
+        <div className="flex items-center gap-1.5">
+          <Sparkles className="h-4 w-4 text-rose-500" />
+          <span className="text-xs font-bold text-text-1 tracking-wide">The Nexus Suite</span>
+        </div>
+        <span className="text-[10px] bg-rose-500/15 text-rose-600 dark:text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded-full font-mono">
+          Unified Ecosystem
+        </span>
+      </div>
+
+      {/* User badge */}
+      <div className="mb-2.5 p-2 bg-soft-tint/60 border border-border/50 rounded-xl flex items-center gap-2">
+        <div className="w-7 h-7 rounded-lg bg-rose-600/20 border border-rose-500/40 flex items-center justify-center text-xs font-bold text-rose-600 dark:text-rose-300 shrink-0">
+          T
+        </div>
+        <div className="overflow-hidden">
+          <div className="text-xs font-semibold text-text-1 truncate">Thu Won (Admin)</div>
+          <div className="text-[10px] text-text-2 truncate flex items-center gap-1">
+            <ShieldCheck className="h-3 w-3 text-rose-500 shrink-0" />
+            <span>thuwon416@gmail.com</span>
+          </div>
+        </div>
+      </div>
+
+      {/* App list */}
+      <div className="space-y-1">
+        {NEXUS_APPS.map((app) => {
+          const isCurrent = app.id === currentAppId;
+          const targetUrl = isLocal ? app.localUrl : app.prodUrl;
+          return (
+            <a
+              key={app.id}
+              href={targetUrl}
+              target={isCurrent ? '_self' : '_blank'}
+              rel="noreferrer"
+              onClick={() => setIsOpen(false)}
+              className={`flex items-center justify-between p-2 rounded-xl transition-all ${
+                isCurrent
+                  ? 'bg-rose-500/15 border border-rose-500/40 text-rose-600 dark:text-rose-200'
+                  : 'hover:bg-soft-tint border border-transparent text-text-2 hover:text-text-1'
+              }`}
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <span className="text-base shrink-0">{app.icon}</span>
+                <div className="truncate">
+                  <div className="text-xs font-semibold flex items-center gap-1.5">
+                    <span>{app.name}</span>
+                    {isCurrent && (
+                      <span className="text-[9px] bg-rose-500/30 text-rose-600 dark:text-rose-300 px-1.5 py-0.5 rounded font-mono">
+                        Active
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-[10px] text-text-2 truncate">{app.subtitle}</div>
+                </div>
+              </div>
+              {!isCurrent && <ExternalLink className="h-3.5 w-3.5 text-text-2 shrink-0 ml-2" />}
+            </a>
+          );
+        })}
+      </div>
+
+      {/* Footer */}
+      <div className="mt-2.5 pt-2 border-t border-border/40 text-[10px] text-center text-text-2">
+        Single Sign-On · Isolated API Safe
+      </div>
+    </div>
+  );
+
   return (
-    <div className="relative inline-block text-left" ref={dropdownRef}>
+    <div className="relative inline-block text-left">
       <button
+        ref={buttonRef}
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setIsOpen((prev) => !prev)}
         className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
           isOpen
             ? 'bg-rose-500/20 border-rose-500/50 text-rose-500 dark:text-rose-300 shadow-[0_0_12px_rgba(244,63,94,0.25)]'
@@ -112,82 +230,13 @@ export function NexusAppSwitcher({
         <span className="text-[10px] bg-rose-500/15 text-rose-600 dark:text-rose-300 px-1.5 py-0.5 rounded-full font-mono">
           6 Apps
         </span>
-        <ChevronDown className={`h-3.5 w-3.5 text-text-2 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown
+          className={`h-3.5 w-3.5 text-text-2 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+        />
       </button>
 
-      {isOpen && (
-        <div
-          className={`absolute ${
-            dropdownPosition === 'top'
-              ? 'left-0 bottom-full mb-2'
-              : 'right-0 top-full mt-2'
-          } w-80 bg-card/95 backdrop-blur-xl border border-rose-500/30 rounded-2xl shadow-2xl z-50 p-3 animate-in fade-in zoom-in-95 duration-150`}
-        >
-          <div className="flex items-center justify-between pb-2 mb-2 border-b border-border/60 px-1">
-            <div className="flex items-center gap-1.5">
-              <Sparkles className="h-4 w-4 text-rose-500" />
-              <span className="text-xs font-bold text-text-1 tracking-wide">The Nexus Suite</span>
-            </div>
-            <span className="text-[10px] bg-rose-500/15 text-rose-600 dark:text-rose-300 border border-rose-500/30 px-2 py-0.5 rounded-full font-mono">
-              Unified Ecosystem
-            </span>
-          </div>
-
-          <div className="mb-2.5 p-2 bg-soft-tint/60 border border-border/50 rounded-xl flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-rose-600/20 border border-rose-500/40 flex items-center justify-center text-xs font-bold text-rose-600 dark:text-rose-300 shrink-0">
-              T
-            </div>
-            <div className="overflow-hidden">
-              <div className="text-xs font-semibold text-text-1 truncate">Thu Won (Admin)</div>
-              <div className="text-[10px] text-text-2 truncate flex items-center gap-1">
-                <ShieldCheck className="h-3 w-3 text-rose-500 shrink-0" />
-                <span>thuwon417@gmail.com</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-1">
-            {NEXUS_APPS.map((app) => {
-              const isCurrent = app.id === currentAppId;
-              const targetUrl = isLocal ? app.localUrl : app.prodUrl;
-              return (
-                <a
-                  key={app.id}
-                  href={targetUrl}
-                  target={isCurrent ? '_self' : '_blank'}
-                  rel="noreferrer"
-                  onClick={() => setIsOpen(false)}
-                  className={`flex items-center justify-between p-2 rounded-xl transition-all ${
-                    isCurrent
-                      ? 'bg-rose-500/15 border border-rose-500/40 text-rose-600 dark:text-rose-200'
-                      : 'hover:bg-soft-tint border border-transparent text-text-2 hover:text-text-1'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <span className="text-base shrink-0">{app.icon}</span>
-                    <div className="truncate">
-                      <div className="text-xs font-semibold flex items-center gap-1.5">
-                        <span>{app.name}</span>
-                        {isCurrent && (
-                          <span className="text-[9px] bg-rose-500/30 text-rose-600 dark:text-rose-300 px-1.5 py-0.2 rounded font-mono">
-                            Active
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-[10px] text-text-2 truncate">{app.subtitle}</div>
-                    </div>
-                  </div>
-                  {!isCurrent && <ExternalLink className="h-3.5 w-3.5 text-text-2 shrink-0 ml-2" />}
-                </a>
-              );
-            })}
-          </div>
-
-          <div className="mt-2.5 pt-2 border-t border-border/40 text-[10px] text-center text-text-2">
-            Single Sign-On · Isolated API Safe
-          </div>
-        </div>
-      )}
+      {/* Render dropdown via portal to escape parent stacking contexts */}
+      {isOpen && mounted && createPortal(dropdownPanel, document.body)}
     </div>
   );
 }

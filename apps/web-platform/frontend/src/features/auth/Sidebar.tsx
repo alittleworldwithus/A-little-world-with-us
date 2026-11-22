@@ -105,7 +105,7 @@ export default function Sidebar() {
 
   return (
     <aside aria-label={t("nav.sidebarLabel")} className="flex h-full w-full flex-col rounded-panel border border-accent-1/20 bg-card px-3 py-6 shadow-lg backdrop-blur-xl">
-      <Link href="/dashboard" className="mb-7 flex items-center gap-3 px-2">
+      <Link href="/dashboard" className="mb-4 flex items-center gap-3 px-2">
         <LittleWorldLogo size={36} showText={false} />
 
         <div>
@@ -118,6 +118,10 @@ export default function Sidebar() {
           <p className="text-xs text-text-2">{t('nav.tagline')}</p>
         </div>
       </Link>
+
+      <div className="mb-5 px-1">
+        <NexusAppSwitcher currentAppId="alittleworld" dropdownPosition="bottom" />
+      </div>
 
       <nav aria-label={t("nav.navigationLabel")} className="flex flex-1 flex-col gap-2 overflow-y-auto">
         {navGroups.map(({ label, labelKey, items }) => {
@@ -179,10 +183,6 @@ export default function Sidebar() {
         <p className="text-xs italic leading-relaxed text-text-1">
           “{t('nav.sidebarQuote')}”
         </p>
-      </div>
-
-      <div className="mt-3 px-2">
-        <NexusAppSwitcher currentAppId="alittleworld" />
       </div>
 
       <div className="mt-4 px-2">

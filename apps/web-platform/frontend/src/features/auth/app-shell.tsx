@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Sidebar from '@/features/auth/Sidebar'
 import BottomNav from '@/features/auth/BottomNav'
+import { NexusAppSwitcher } from '@/components/NexusAppSwitcher'
 
 const keyboardRoutes = [
   { key: '1', href: '/dashboard' },
@@ -43,7 +44,19 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <Sidebar />
         </aside>
 
-        <main id="main-content" className="min-w-0 flex-1 px-4 pb-28 pt-6 md:px-6 lg:px-8 lg:pb-8">
+        <main id="main-content" className="min-w-0 flex-1 px-4 pb-28 pt-4 md:px-6 lg:px-8 lg:pb-8">
+          {/* Top Bar for Nexus Suite App Switcher and Ecosystem Info */}
+          <header className="mb-4 flex items-center justify-between gap-4 rounded-2xl border border-border/60 bg-card/70 px-4 py-2.5 backdrop-blur-md shadow-xs">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold uppercase tracking-wider text-text-2">Nexus Ecosystem</span>
+              <span className="text-text-2/40">·</span>
+              <span className="text-xs font-bold text-rose-500">A Little World</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <NexusAppSwitcher currentAppId="alittleworld" dropdownPosition="bottom" />
+            </div>
+          </header>
+
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}

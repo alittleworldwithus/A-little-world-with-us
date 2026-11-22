@@ -19,34 +19,34 @@ const SIZE_CONFIGS = {
   sm: {
     container: 'h-9',
     avatar: 'w-8 h-8 text-[11px]',
-    overlap: '-ml-2.5',
-    badge: 'w-4 h-4 text-[9px] -mt-2',
+    gap: 'gap-1.5',
+    badge: 'w-4 h-4 text-[9px]',
     iconSize: 'w-2.5 h-2.5',
     border: 'border-[1.5px]',
   },
   md: {
     container: 'h-12',
     avatar: 'w-11 h-11 text-xs',
-    overlap: '-ml-3',
-    badge: 'w-5 h-5 text-[10px] -mt-2.5',
+    gap: 'gap-2',
+    badge: 'w-5 h-5 text-[10px]',
     iconSize: 'w-3 h-3',
     border: 'border-2',
   },
   lg: {
     container: 'h-16',
     avatar: 'w-14 h-14 text-sm font-semibold',
-    overlap: '-ml-4',
-    badge: 'w-6 h-6 text-xs -mt-3',
+    gap: 'gap-2.5',
+    badge: 'w-6 h-6 text-xs',
     iconSize: 'w-3.5 h-3.5',
     border: 'border-2',
   },
   xl: {
-    container: 'h-22',
-    avatar: 'w-20 h-20 text-base font-bold',
-    overlap: '-ml-5',
-    badge: 'w-7 h-7 text-sm -mt-3.5',
+    container: 'h-20',
+    avatar: 'w-16 h-16 text-base font-bold',
+    gap: 'gap-3',
+    badge: 'w-7 h-7 text-sm',
     iconSize: 'w-4 h-4',
-    border: 'border-[3px]',
+    border: 'border-[2.5px]',
   },
 }
 
@@ -109,42 +109,38 @@ export default function ConnectedCoupleAvatars({
 
   return (
     <div
-      className={`relative inline-flex items-center select-none ${cfg.container} ${className}`}
+      className={`relative inline-flex items-center ${cfg.gap} select-none ${cfg.container} ${className}`}
       aria-label={`${userName} and ${partnerName}`}
     >
       {/* User Avatar (Left) */}
-      <div className="z-10">
-        <SingleAvatar
-          url={userAvatarUrl}
-          name={userName}
-          fallbackLetter="U"
-          avatarClass={cfg.avatar}
-          borderClass={cfg.border}
-          priority={priority}
-        />
-      </div>
+      <SingleAvatar
+        url={userAvatarUrl}
+        name={userName}
+        fallbackLetter="U"
+        avatarClass={cfg.avatar}
+        borderClass={cfg.border}
+        priority={priority}
+      />
 
-      {/* Floating Center Heart Badge */}
+      {/* Center Heart Badge */}
       {showHeartBadge && (
         <div
-          className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex items-center justify-center rounded-full bg-card shadow-sm border border-accent-1/20 ${cfg.badge}`}
+          className={`flex items-center justify-center shrink-0 rounded-full bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-700/60 shadow-xs ${cfg.badge}`}
           aria-hidden="true"
         >
           <Heart className={`fill-rose-500 text-rose-500 ${cfg.iconSize} animate-pulse`} />
         </div>
       )}
 
-      {/* Partner Avatar (Right, overlapping) */}
-      <div className={`z-0 ${cfg.overlap}`}>
-        <SingleAvatar
-          url={partnerAvatarUrl}
-          name={partnerName}
-          fallbackLetter="P"
-          avatarClass={cfg.avatar}
-          borderClass={cfg.border}
-          priority={priority}
-        />
-      </div>
+      {/* Partner Avatar (Right) */}
+      <SingleAvatar
+        url={partnerAvatarUrl}
+        name={partnerName}
+        fallbackLetter="P"
+        avatarClass={cfg.avatar}
+        borderClass={cfg.border}
+        priority={priority}
+      />
     </div>
   )
 }

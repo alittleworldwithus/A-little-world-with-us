@@ -4,9 +4,16 @@ const withSerwist = require('@serwist/next').default({
   disable: process.env.NODE_ENV === 'development',
 })
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-})
+const withBundleAnalyzer =
+  process.env.ANALYZE === 'true'
+    ? (() => {
+        try {
+          return require('@next/bundle-analyzer')({ enabled: true })
+        } catch {
+          return (config) => config
+        }
+      })()
+    : (config) => config
 
 /** @type {import('next').NextConfig} */
 const buildCpus = Number.parseInt(process.env.NEXT_BUILD_CPUS || '', 10)

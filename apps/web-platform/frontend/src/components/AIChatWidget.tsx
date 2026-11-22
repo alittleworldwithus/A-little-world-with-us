@@ -1,5 +1,5 @@
 'use client'
-import { Hand, MessageCircle } from 'lucide-react'
+import { Hand, MessageCircle, X } from 'lucide-react'
 import { useState } from 'react'
 
 export default function AIChatWidget() {
@@ -47,9 +47,19 @@ export default function AIChatWidget() {
       {isOpen && (
         <div className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom,0px))] right-[calc(1rem+env(safe-area-inset-right,0px))] w-80 max-w-[calc(100vw-2rem)] bg-card rounded-btn shadow-xl z-50 overflow-hidden border border-accent-1/20">
           {/* Header */}
-          <div className="bg-accent-1 text-white font-semibold shadow-sm p-4">
-            <h3 className="font-bold">AI Assistant</h3>
-            <p className="text-sm opacity-80">Your relationship companion</p>
+          <div className="bg-accent-1 text-white font-semibold shadow-sm p-4 flex items-center justify-between">
+            <div>
+              <h3 className="font-bold">AI Assistant</h3>
+              <p className="text-sm opacity-80">Your relationship companion</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsOpen(false)}
+              className="rounded-full p-1 hover:bg-white/20 transition-colors"
+              aria-label="Close AI assistant"
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
 
           {/* Messages */}

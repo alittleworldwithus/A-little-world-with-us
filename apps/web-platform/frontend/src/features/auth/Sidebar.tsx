@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import {
   LogOut, Calendar, Camera, HeartPulse, HelpCircle, Home, Info,
   Leaf, LockKeyhole, MapPin, MessageCircleHeart, Gamepad2, Music,
-  PhoneCall, Settings, Sparkles, Star, MonitorPlay,
+  PhoneCall, Settings, Sparkles, Star, MonitorPlay, Film,
   Languages, Shield, FileText, Workflow, Gauge,
 } from 'lucide-react'
 import LittleWorldLogo from '@/components/shared/LittleWorldLogo'
@@ -34,6 +34,7 @@ const navGroups = [
     label: 'Memories', labelKey: 'groupMemories',
     items: [
       { href: '/memories', key: 'memories', icon: Camera },
+      { href: '/anniversary-recap', key: 'anniversaryRecap', icon: Film },
     ],
   },
   {

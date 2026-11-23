@@ -53,7 +53,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               <span className="text-xs font-bold text-rose-500">A Little World</span>
             </div>
             <div className="flex items-center gap-3">
-              <NexusAppSwitcher currentAppId="alittleworld" dropdownPosition="bottom" />
+              <NexusAppSwitcher currentAppId="alittleworld" />
             </div>
           </header>
 

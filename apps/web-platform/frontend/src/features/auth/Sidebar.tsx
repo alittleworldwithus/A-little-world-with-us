@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 import LittleWorldLogo from '@/components/shared/LittleWorldLogo'
 import ThemeToggle from '@/components/shared/ThemeToggle'
-import { NexusAppSwitcher } from '@/components/NexusAppSwitcher'
+
 import { useLanguage } from '@/contexts/LanguageContext'
 import { supabase } from '@/lib/supabase'
 import { removeBrowserPushSubscription } from '@/lib/notifications'
@@ -118,10 +118,6 @@ export default function Sidebar() {
           <p className="text-xs text-text-2">{t('nav.tagline')}</p>
         </div>
       </Link>
-
-      <div className="mb-5 px-1">
-        <NexusAppSwitcher currentAppId="alittleworld" dropdownPosition="bottom" />
-      </div>
 
       <nav aria-label={t("nav.navigationLabel")} className="flex flex-1 flex-col gap-2 overflow-y-auto">
         {navGroups.map(({ label, labelKey, items }) => {

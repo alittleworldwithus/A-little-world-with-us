@@ -887,8 +887,24 @@ export default function RealtimeChat({ className }: RealtimeChatProps = {}) {
 
   if (!coupleId) {
     return (
-      <div className={`flex ${className ?? 'h-[min(680px,calc(100dvh-10rem))]'} min-h-[360px] items-center justify-center glass-card`}>
-        <p className="text-text-2">Link with your partner to start chatting</p>
+      <div className={`flex ${className ?? 'h-[min(680px,calc(100dvh-10rem))]'} min-h-[420px] items-center justify-center glass-card p-6`}>
+        <div className="flex max-w-sm flex-col items-center text-center">
+          <div className="relative mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-accent-1/10 border border-accent-1/25 shadow-[0_0_30px_rgba(244,114,182,0.2)]">
+            <Heart className="h-10 w-10 text-accent-1 animate-pulse" />
+            <Sparkles className="absolute -top-1 -right-1 h-5 w-5 text-accent-2" />
+          </div>
+          <h3 className="text-lg font-bold text-text-1">Start Your Story Together</h3>
+          <p className="mt-2 text-xs leading-relaxed text-text-2">
+            Link with your partner to unlock end-to-end encrypted private chat, voice notes, live photo exchange, and shared memories.
+          </p>
+          <Link
+            href="/settings"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-accent-1 px-5 py-2.5 text-xs font-semibold text-white shadow-md shadow-accent-1/20 transition-all hover:bg-accent-1/90 active:scale-95"
+          >
+            <Heart className="h-4 w-4 fill-current" />
+            <span>Invite Your Partner</span>
+          </Link>
+        </div>
       </div>
     )
   }

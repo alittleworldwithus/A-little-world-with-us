@@ -113,12 +113,19 @@ export default function BottomNav() {
               key={href}
               href={href}
               aria-current={active ? 'page' : undefined}
-              className={`flex min-w-14 flex-col items-center gap-1 rounded-xl px-2 py-1 text-xs transition ${
-                active ? 'text-accent-1' : 'text-text-2'
+              className={`flex min-w-14 flex-col items-center gap-1 rounded-xl px-2 py-1 text-xs transition relative ${
+                active
+                  ? 'text-accent-1 font-semibold drop-shadow-[0_0_8px_rgba(244,114,182,0.55)]'
+                  : 'text-text-2 hover:text-text-1'
               }`}
             >
-              <Icon size={19} />
-              <span>{t(`nav.${labelKey}`)}</span>
+              <div className="relative">
+                <Icon size={19} className={active ? 'scale-110 transition-transform' : ''} />
+                {active && (
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-accent-1 shadow-[0_0_6px_rgba(244,114,182,0.9)]" />
+                )}
+              </div>
+              <span className="text-[11px]">{t(`nav.${labelKey}`)}</span>
             </Link>
           )
         })}

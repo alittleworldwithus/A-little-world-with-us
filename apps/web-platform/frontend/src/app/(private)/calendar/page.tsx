@@ -210,21 +210,19 @@ export default function CalendarPage() {
       {activeTab === 'calendar' && (
         <div className="space-y-6">
           {/* Top 2-Column Calendar & Day Agenda */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-            {/* Left: Compact, Proportional Photo & Event Calendar */}
-            <div className="lg:col-span-7 xl:col-span-7 flex justify-center">
-              <div className="w-full max-w-[480px]">
-                <PhotoMediaCalendar
-                  coupleId={coupleId}
-                  onSelectDate={(dateStr) => setSelectedDateStr(dateStr)}
-                  className="shadow-card border-border/70"
-                />
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+            {/* Left: Balanced Photo & Event Calendar */}
+            <div className="flex flex-col">
+              <PhotoMediaCalendar
+                coupleId={coupleId}
+                onSelectDate={(dateStr) => setSelectedDateStr(dateStr)}
+                className="shadow-card border-border/70 h-full"
+              />
             </div>
 
             {/* Right: Selected Date Agenda & Quick Add */}
-            <div className="lg:col-span-5 xl:col-span-5 flex flex-col">
-              <div className="glass-card rounded-2xl border border-border/70 bg-card p-5 shadow-card space-y-4 h-full flex flex-col justify-between min-h-[420px]">
+            <div className="flex flex-col">
+              <div className="glass-card rounded-2xl border border-border/70 bg-card p-5 sm:p-6 shadow-card space-y-4 h-full flex flex-col justify-between min-h-[420px]">
                 {/* Date Header */}
                 <div className="flex items-center justify-between border-b border-border/40 pb-3">
                   <div>

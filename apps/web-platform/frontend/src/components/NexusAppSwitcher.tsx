@@ -287,12 +287,12 @@ export function NexusAppSwitcher({
         top: dropdownPos.top,
         left: dropdownPos.left,
         width: 340,
-        backgroundColor: "rgba(10, 14, 23, 0.96)",
+        backgroundColor: "var(--color-card, #ffffff)",
         backdropFilter: "blur(24px)",
         WebkitBackdropFilter: "blur(24px)",
-        border: "1px solid rgba(255, 255, 255, 0.12)",
+        border: "1px solid var(--color-border, rgba(139,92,246,0.18))",
         borderRadius: "16px",
-        boxShadow: "0 24px 60px rgba(0, 0, 0, 0.8), 0 0 32px rgba(56, 189, 248, 0.12)",
+        boxShadow: "0 8px 40px rgba(139,92,246,0.10), 0 2px 12px rgba(0,0,0,0.08)",
         padding: "14px",
         zIndex: 999999,
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
@@ -306,12 +306,12 @@ export function NexusAppSwitcher({
           justifyContent: "space-between",
           paddingBottom: "10px",
           marginBottom: "10px",
-          borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+          borderBottom: "1px solid var(--color-border, rgba(139,92,246,0.15))",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
           <Sparkles style={{ width: 14, height: 14, color: "#38bdf8" }} />
-          <span style={{ fontSize: "11px", fontWeight: 700, color: "#f8fafc", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+          <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-text-1, #1e1b4b)", letterSpacing: "0.12em", textTransform: "uppercase" }}>
             The Nexus Suite
           </span>
         </div>
@@ -339,8 +339,8 @@ export function NexusAppSwitcher({
           gap: "9px",
           padding: "8px 10px",
           marginBottom: "10px",
-          backgroundColor: "rgba(255, 255, 255, 0.03)",
-          border: "1px solid rgba(255, 255, 255, 0.06)",
+          backgroundColor: "var(--color-accent-1-soft, rgba(139,92,246,0.06))",
+          border: "1px solid var(--color-border, rgba(139,92,246,0.14))",
           borderRadius: "10px",
         }}
       >
@@ -349,8 +349,8 @@ export function NexusAppSwitcher({
             width: 28,
             height: 28,
             borderRadius: "8px",
-            background: "linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(99, 102, 241, 0.3))",
-            border: "1px solid rgba(56, 189, 248, 0.4)",
+            background: "linear-gradient(135deg, var(--color-accent-1, #8b5cf6), var(--color-accent-2, #ec4899))",
+            border: "1px solid var(--color-accent-1, rgba(139,92,246,0.5))",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -363,13 +363,13 @@ export function NexusAppSwitcher({
           {userName.charAt(0).toUpperCase()}
         </div>
         <div style={{ overflow: "hidden", flex: 1 }}>
-          <div style={{ fontSize: "12px", fontWeight: 600, color: "#ffffff", lineHeight: 1.2 }}>
-            {userName} <span style={{ fontSize: "10px", color: "#38bdf8", fontWeight: 500 }}>({userRole})</span>
+          <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--color-text-1, #1e1b4b)", lineHeight: 1.2 }}>
+            {userName} <span style={{ fontSize: "10px", color: "var(--color-accent-1, #8b5cf6)", fontWeight: 500 }}>({userRole})</span>
           </div>
           <div
             style={{
               fontSize: "10px",
-              color: "#94a3b8",
+              color: "var(--color-text-2, #6b7280)",
               display: "flex",
               alignItems: "center",
               gap: "4px",
@@ -410,14 +410,14 @@ export function NexusAppSwitcher({
                 textDecoration: "none",
                 transition: "all 0.18s cubic-bezier(0.16, 1, 0.3, 1)",
                 backgroundColor: isCurrent
-                  ? "rgba(56, 189, 248, 0.14)"
+                  ? app.bgRgba
                   : isHovered
-                  ? "rgba(255, 255, 255, 0.05)"
+                  ? "var(--color-accent-1-soft, rgba(139,92,246,0.06))"
                   : "transparent",
                 border: isCurrent
                   ? `1px solid ${app.borderRgba}`
                   : isHovered
-                  ? "1px solid rgba(255, 255, 255, 0.1)"
+                  ? "1px solid var(--color-border, rgba(139,92,246,0.18))"
                   : "1px solid transparent",
                 transform: isHovered ? "translateX(2px)" : "none",
               }}
@@ -448,7 +448,7 @@ export function NexusAppSwitcher({
                       style={{
                         fontSize: "12.5px",
                         fontWeight: 600,
-                        color: isCurrent ? app.color : "#ffffff",
+                        color: isCurrent ? app.color : "var(--color-text-1, #1e1b4b)",
                         lineHeight: 1.3,
                       }}
                     >
@@ -458,8 +458,8 @@ export function NexusAppSwitcher({
                       <span
                         style={{
                           fontSize: "8.5px",
-                          backgroundColor: "rgba(56, 189, 248, 0.25)",
-                          color: "#38bdf8",
+                          backgroundColor: app.bgRgba,
+                          color: app.color,
                           padding: "1px 6px",
                           borderRadius: "4px",
                           fontWeight: 600,
@@ -474,7 +474,7 @@ export function NexusAppSwitcher({
                   <div
                     style={{
                       fontSize: "10.5px",
-                      color: "#94a3b8",
+                      color: "var(--color-text-2, #6b7280)",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
                       whiteSpace: "nowrap",
@@ -491,7 +491,7 @@ export function NexusAppSwitcher({
                   style={{
                     width: 12,
                     height: 12,
-                    color: isHovered ? "#ffffff" : "#64748b",
+                    color: isHovered ? "var(--color-text-1, #1e1b4b)" : "var(--color-text-2, #94a3b8)",
                     flexShrink: 0,
                     marginLeft: "8px",
                     transition: "color 0.15s ease",
@@ -508,12 +508,12 @@ export function NexusAppSwitcher({
         style={{
           marginTop: "12px",
           paddingTop: "9px",
-          borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+          borderTop: "1px solid var(--color-border, rgba(139,92,246,0.15))",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           fontSize: "10px",
-          color: "#64748b",
+          color: "var(--color-text-2, #94a3b8)",
         }}
       >
         <span>Zero Trust Ecosystem</span>
@@ -555,27 +555,33 @@ export function NexusAppSwitcher({
           gap: "8px",
           padding: "6px 12px",
           borderRadius: "10px",
-          border: isOpen ? "1px solid rgba(56, 189, 248, 0.6)" : "1px solid rgba(255, 255, 255, 0.14)",
-          backgroundColor: isOpen ? "rgba(56, 189, 248, 0.16)" : "rgba(15, 23, 42, 0.85)",
-          color: "#f8fafc",
+          border: isOpen
+            ? "1px solid var(--color-accent-1, rgba(139,92,246,0.6))"
+            : "1px solid var(--color-border, rgba(139,92,246,0.2))",
+          backgroundColor: isOpen
+            ? "var(--color-accent-1-soft, rgba(139,92,246,0.12))"
+            : "var(--color-card, rgba(255,255,255,0.85))",
+          color: "var(--color-text-1, #1e1b4b)",
           fontSize: "12px",
           fontWeight: 600,
           cursor: "pointer",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
-          boxShadow: isOpen ? "0 0 16px rgba(56, 189, 248, 0.3)" : "0 2px 8px rgba(0, 0, 0, 0.3)",
+          boxShadow: isOpen
+            ? "0 0 12px var(--color-accent-1-soft, rgba(139,92,246,0.15))"
+            : "0 2px 8px rgba(0, 0, 0, 0.06)",
           transition: "all 0.18s ease",
         }}
         title="The Nexus Suite Unified App Switcher"
       >
-        <NexusMatrixIcon size={14} color={currentApp.color || "#38bdf8"} />
+        <NexusMatrixIcon size={14} color={currentApp.color || "#8b5cf6"} />
         <span style={{ letterSpacing: "0.01em" }}>Nexus Suite</span>
         <span
           style={{
             fontSize: "9.5px",
-            backgroundColor: "rgba(56, 189, 248, 0.18)",
-            color: "#38bdf8",
-            border: "1px solid rgba(56, 189, 248, 0.3)",
+            backgroundColor: "var(--color-accent-1-soft, rgba(139,92,246,0.12))",
+            color: "var(--color-accent-1, #8b5cf6)",
+            border: "1px solid var(--color-accent-1-border, rgba(139,92,246,0.25))",
             padding: "1px 6px",
             borderRadius: "999px",
             fontFamily: "monospace",
@@ -588,7 +594,7 @@ export function NexusAppSwitcher({
           style={{
             width: 12,
             height: 12,
-            color: "#94a3b8",
+            color: "var(--color-text-2, #6b7280)",
             transform: isOpen ? "rotate(180deg)" : "none",
             transition: "transform 0.2s ease",
           }}

@@ -124,7 +124,7 @@ export default function FinancialGoals() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8 animate-fade-in">
+    <div className="w-full max-w-6xl mx-auto space-y-6 animate-fade-in">
       <section className="rounded-panel border border-accent-1/20 bg-card p-6 shadow-[0_18px_42px_rgba(0,0,0,0.12)]">
         <p className="text-xs uppercase tracking-[0.22em] text-text-2">{t('Finance.goals')}</p>
         <h1 className="mt-3 flex items-center gap-3 text-3xl font-serif text-text-1">

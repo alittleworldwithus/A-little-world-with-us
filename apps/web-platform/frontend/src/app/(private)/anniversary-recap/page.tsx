@@ -113,34 +113,34 @@ export default function AnniversaryRecapPage() {
   };
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto p-4 md:p-6 text-slate-100 font-sans">
+    <div className="space-y-6 max-w-6xl mx-auto p-4 md:p-6">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-rose-950/40 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/40 pb-5">
         <div className="flex items-center gap-3.5">
-          <div className="p-3 bg-rose-500/15 border border-rose-500/30 rounded-2xl text-rose-400 shadow-sm shadow-rose-500/10">
-            <Heart className="w-6 h-6 fill-rose-500/20" />
+          <div className="p-3 bg-accent-1/10 border border-accent-1/20 rounded-2xl text-accent-1 shadow-sm">
+            <Heart className="w-6 h-6 fill-accent-1/20" />
           </div>
           <div>
             <div className="flex items-center gap-2.5">
-              <h1 className="text-xl font-bold tracking-tight text-white">Anniversary & Memory Montage</h1>
-              <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30">
+              <h1 className="text-xl font-bold tracking-tight text-text-1">Anniversary & Memory Montage</h1>
+              <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-accent-1/10 text-accent-1 border border-accent-1/20">
                 Day {anniversaryDays} Together
               </span>
             </div>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-text-2 mt-1">
               "On This Day" retrospective video generator, AI date night planner, and interactive couple travel map.
             </p>
           </div>
         </div>
 
         {/* Tab Controls */}
-        <div className="flex items-center gap-1.5 bg-[#120B18] border border-rose-950/60 p-1 rounded-xl">
+        <nav className="flex items-center gap-1.5 bg-card/60 border border-border/60 backdrop-blur-sm p-1 rounded-full">
           <button
             onClick={() => setActiveTab('recap')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${
               activeTab === 'recap'
-                ? 'bg-rose-600 text-white shadow-sm shadow-rose-600/30'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-accent-1 text-white shadow-sm'
+                : 'text-text-2 hover:text-text-1 hover:bg-card'
             }`}
           >
             <Film className="w-3.5 h-3.5" />
@@ -148,10 +148,10 @@ export default function AnniversaryRecapPage() {
           </button>
           <button
             onClick={() => setActiveTab('dates')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${
               activeTab === 'dates'
-                ? 'bg-rose-600 text-white shadow-sm shadow-rose-600/30'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-accent-1 text-white shadow-sm'
+                : 'text-text-2 hover:text-text-1 hover:bg-card'
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
@@ -159,25 +159,25 @@ export default function AnniversaryRecapPage() {
           </button>
           <button
             onClick={() => setActiveTab('pinmap')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${
               activeTab === 'pinmap'
-                ? 'bg-rose-600 text-white shadow-sm shadow-rose-600/30'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-accent-1 text-white shadow-sm'
+                : 'text-text-2 hover:text-text-1 hover:bg-card'
             }`}
           >
             <MapPin className="w-3.5 h-3.5" />
             Travel Pin-Map
           </button>
-        </div>
+        </nav>
       </div>
 
       {/* TAB 1: RECAP MONTAGE VIDEO GENERATOR */}
       {activeTab === 'recap' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left: Controls & On This Day (7 cols) */}
-          <div className="lg:col-span-7 space-y-5 bg-[#120B18]/70 border border-rose-950/60 p-6 rounded-2xl shadow-sm">
-            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-rose-400" />
+          <div className="lg:col-span-7 space-y-5 glass-card bg-card border border-border/70 p-6 rounded-2xl shadow-card">
+            <h2 className="text-xs font-bold text-text-2 uppercase tracking-wider flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-accent-1" />
               On This Day Retrospective Footage
             </h2>
 
@@ -188,37 +188,37 @@ export default function AnniversaryRecapPage() {
                   onClick={() => setCurrentSlideIndex(idx)}
                   className={`p-3.5 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${
                     currentSlideIndex === idx
-                      ? 'bg-rose-950/40 border-rose-500/50 ring-1 ring-rose-500/30 text-rose-200'
-                      : 'bg-[#09050C] border-rose-950/40 text-slate-400 hover:border-slate-700'
+                      ? 'bg-accent-1/10 border-accent-1/40 ring-1 ring-accent-1/20 text-text-1'
+                      : 'bg-card/60 border-border/50 text-text-2 hover:border-accent-1/30 hover:bg-accent-1/5'
                   }`}
                 >
                   <div>
                     <div className="flex items-center gap-2 mb-0.5">
-                      <span className="font-semibold text-white text-xs">{m.title}</span>
-                      <span className="px-2 py-0.2 rounded text-[10px] font-mono bg-rose-500/10 text-rose-300 border border-rose-500/20">
+                      <span className="font-semibold text-text-1 text-xs">{m.title}</span>
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-accent-1/10 text-accent-1 border border-accent-1/20">
                         {m.year}
                       </span>
                     </div>
-                    <div className="text-[11px] text-slate-400 flex items-center gap-1">
-                      <MapPin className="w-3 h-3 text-rose-400" />
+                    <div className="text-[11px] text-text-2 flex items-center gap-1">
+                      <MapPin className="w-3 h-3 text-accent-1" />
                       <span>{m.location}</span>
                     </div>
                   </div>
-                  <span className="text-xs font-mono text-slate-400">{m.date}</span>
+                  <span className="text-xs font-mono text-text-2">{m.date}</span>
                 </div>
               ))}
             </div>
 
             {/* Soundtrack & Color Grading Selector */}
             <div className="grid grid-cols-2 gap-3 pt-2">
-              <div className="bg-[#09050C] p-3 rounded-xl border border-rose-950/40">
-                <span className="text-[10px] text-slate-400 font-semibold uppercase block mb-1">
+              <div className="bg-card/60 p-3 rounded-xl border border-border/50">
+                <span className="text-[10px] text-text-2 font-semibold uppercase block mb-1">
                   Romantic Soundtrack
                 </span>
                 <select
                   value={soundtrack}
                   onChange={(e) => setSoundtrack(e.target.value)}
-                  className="w-full bg-[#120B18] border border-rose-950/60 rounded-lg px-2.5 py-1 text-xs text-rose-200 focus:outline-none focus:border-rose-500"
+                  className="w-full bg-card border border-border/60 rounded-lg px-2.5 py-1 text-xs text-text-1 focus:outline-none focus:border-accent-1"
                 >
                   <option value="acoustic">Acoustic Sunset (82 BPM)</option>
                   <option value="lofi">Lo-Fi Love Piano (74 BPM)</option>
@@ -226,14 +226,14 @@ export default function AnniversaryRecapPage() {
                 </select>
               </div>
 
-              <div className="bg-[#09050C] p-3 rounded-xl border border-rose-950/40">
-                <span className="text-[10px] text-slate-400 font-semibold uppercase block mb-1">
+              <div className="bg-card/60 p-3 rounded-xl border border-border/50">
+                <span className="text-[10px] text-text-2 font-semibold uppercase block mb-1">
                   Visual Mood Palette
                 </span>
                 <select
                   value={colorMood}
                   onChange={(e) => setColorMood(e.target.value)}
-                  className="w-full bg-[#120B18] border border-rose-950/60 rounded-lg px-2.5 py-1 text-xs text-rose-200 focus:outline-none focus:border-rose-500"
+                  className="w-full bg-card border border-border/60 rounded-lg px-2.5 py-1 text-xs text-text-1 focus:outline-none focus:border-accent-1"
                 >
                   <option value="golden">Golden Warmth Glow</option>
                   <option value="pastel">Dreamy Lavender Pastel</option>
@@ -242,36 +242,36 @@ export default function AnniversaryRecapPage() {
               </div>
             </div>
 
-            <button className="w-full py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-semibold rounded-xl text-xs flex items-center justify-center gap-2 shadow-md shadow-rose-600/30 transition-all">
+            <button className="w-full py-2.5 bg-accent-1 hover:opacity-90 text-white font-semibold rounded-xl text-xs flex items-center justify-center gap-2 shadow-sm transition-all">
               <Film className="w-4 h-4" />
               <span>Export HD Anniversary Montage (MP4)</span>
             </button>
           </div>
 
           {/* Right: Video Canvas Preview (5 cols) */}
-          <div className="lg:col-span-5 space-y-4 bg-[#120B18]/70 border border-rose-950/60 p-6 rounded-2xl shadow-sm flex flex-col items-center">
-            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider self-start flex items-center gap-2">
-              <Camera className="w-4 h-4 text-rose-400" />
+          <div className="lg:col-span-5 space-y-4 glass-card bg-card border border-border/70 p-6 rounded-2xl shadow-card flex flex-col items-center">
+            <h2 className="text-xs font-bold text-text-2 uppercase tracking-wider self-start flex items-center gap-2">
+              <Camera className="w-4 h-4 text-accent-1" />
               Memory Reel Preview (9:16)
             </h2>
 
             {/* Vertical Video Stage Mockup */}
-            <div className="w-56 aspect-[9/16] bg-[#09050C] rounded-2xl border-2 border-rose-500/40 shadow-2xl relative overflow-hidden flex flex-col justify-between p-4">
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none z-10" />
+            <div className="w-56 aspect-[9/16] bg-accent-1/5 rounded-2xl border-2 border-accent-1/30 shadow-lg relative overflow-hidden flex flex-col justify-between p-4">
+              <div className="absolute inset-0 bg-gradient-to-t from-accent-1/10 via-transparent to-accent-1/5 pointer-events-none z-10" />
 
               {/* Top Reel Counter */}
-              <div className="z-20 flex justify-between items-center text-[10px] font-mono text-rose-300">
-                <span className="bg-rose-950/80 px-2 py-0.5 rounded border border-rose-500/30">
+              <div className="z-20 flex justify-between items-center text-[10px] font-mono text-accent-1">
+                <span className="bg-accent-1/15 px-2 py-0.5 rounded border border-accent-1/25">
                   Day {anniversaryDays}
                 </span>
-                <span className="text-white/80">{memories[currentSlideIndex].year}</span>
+                <span className="text-text-2">{memories[currentSlideIndex].year}</span>
               </div>
 
               {/* Center Play Button Overlay */}
               <div className="z-20 self-center">
                 <button
                   onClick={() => setIsPlaying(!isPlaying)}
-                  className="w-12 h-12 rounded-full bg-rose-600/90 text-white flex items-center justify-center shadow-lg shadow-rose-600/50 hover:scale-105 transition-all"
+                  className="w-12 h-12 rounded-full bg-accent-1 text-white flex items-center justify-center shadow-md hover:opacity-90 hover:scale-105 transition-all"
                 >
                   {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
                 </button>
@@ -279,17 +279,17 @@ export default function AnniversaryRecapPage() {
 
               {/* Bottom Caption Overlay */}
               <div className="z-20 text-left space-y-1">
-                <div className="text-xs font-bold text-white leading-snug">
+                <div className="text-xs font-bold text-text-1 leading-snug">
                   {memories[currentSlideIndex].title}
                 </div>
-                <div className="text-[10px] text-rose-300 flex items-center gap-1 font-mono">
-                  <MapPin className="w-3 h-3 text-rose-400" />
+                <div className="text-[10px] text-accent-1 flex items-center gap-1 font-mono">
+                  <MapPin className="w-3 h-3 text-accent-1" />
                   <span>{memories[currentSlideIndex].location}</span>
                 </div>
               </div>
             </div>
 
-            <div className="text-[11px] text-slate-400 text-center">
+            <div className="text-[11px] text-text-2 text-center">
               Beat-synced with gentle Ken Burns motion and soft vignette transitions.
             </div>
           </div>
@@ -299,9 +299,9 @@ export default function AnniversaryRecapPage() {
       {/* TAB 2: AI DATE NIGHT & LOVE LETTER */}
       {activeTab === 'dates' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-4 space-y-4 bg-[#120B18]/70 border border-rose-950/60 p-6 rounded-2xl shadow-sm">
-            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-rose-400" />
+          <div className="lg:col-span-4 space-y-4 glass-card bg-card border border-border/70 p-6 rounded-2xl shadow-card">
+            <h2 className="text-xs font-bold text-text-2 uppercase tracking-wider flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-accent-1" />
               Date Night Theme & Mood
             </h2>
 
@@ -318,19 +318,19 @@ export default function AnniversaryRecapPage() {
                   }}
                   className={`p-3 rounded-xl border cursor-pointer transition-all ${
                     dateMood === m.id
-                      ? 'bg-rose-950/40 border-rose-500/50 ring-1 ring-rose-500/30 text-rose-200'
-                      : 'bg-[#09050C] border-rose-950/40 text-slate-400 hover:border-slate-700'
+                      ? 'bg-accent-1/10 border-accent-1/40 ring-1 ring-accent-1/20'
+                      : 'bg-card/60 border-border/50 hover:border-accent-1/30 hover:bg-accent-1/5'
                   }`}
                 >
-                  <div className="font-semibold text-xs text-white mb-0.5">{m.name}</div>
-                  <div className="text-[11px] text-slate-400">{m.desc}</div>
+                  <div className="font-semibold text-xs text-text-1 mb-0.5">{m.name}</div>
+                  <div className="text-[11px] text-text-2">{m.desc}</div>
                 </div>
               ))}
             </div>
 
             <button
               onClick={handleGenerateDateIdea}
-              className="w-full py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-md shadow-rose-600/30"
+              className="w-full py-2 bg-accent-1 hover:opacity-90 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               <span>Regenerate Date & Letter</span>
@@ -339,14 +339,14 @@ export default function AnniversaryRecapPage() {
 
           <div className="lg:col-span-8 space-y-4">
             {/* Itinerary Card */}
-            <div className="bg-[#120B18]/70 border border-rose-950/60 p-6 rounded-2xl shadow-sm space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-rose-950/50">
-                <h3 className="font-bold text-white text-sm">{dateItinerary.title}</h3>
-                <span className="text-xs font-mono text-rose-400">{dateItinerary.time}</span>
+            <div className="glass-card bg-card border border-border/70 p-6 rounded-2xl shadow-card space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-border/40">
+                <h3 className="font-bold text-text-1 text-sm">{dateItinerary.title}</h3>
+                <span className="text-xs font-mono text-accent-1">{dateItinerary.time}</span>
               </div>
-              <div className="space-y-2 text-xs text-slate-300">
+              <div className="space-y-2 text-xs text-text-1">
                 {dateItinerary.plan.map((step, idx) => (
-                  <div key={idx} className="p-2.5 rounded-lg bg-[#09050C] border border-rose-950/40">
+                  <div key={idx} className="p-2.5 rounded-lg bg-card/60 border border-border/50">
                     {step}
                   </div>
                 ))}
@@ -354,11 +354,11 @@ export default function AnniversaryRecapPage() {
             </div>
 
             {/* Love Letter Card */}
-            <div className="bg-[#120B18]/70 border border-rose-950/60 p-6 rounded-2xl shadow-sm space-y-3">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+            <div className="glass-card bg-card border border-border/70 p-6 rounded-2xl shadow-card space-y-3">
+              <span className="text-xs font-bold text-text-2 uppercase tracking-wider block">
                 Heartfelt Anniversary Note
               </span>
-              <p className="text-xs text-rose-100 italic leading-relaxed p-4 rounded-xl bg-[#09050C] border border-rose-950/40">
+              <p className="text-xs text-text-1 italic leading-relaxed p-4 rounded-xl bg-accent-1/5 border border-accent-1/15">
                 "{dateItinerary.loveLetter}"
               </p>
             </div>
@@ -371,10 +371,10 @@ export default function AnniversaryRecapPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-sm font-semibold text-white">Our Journey Footsteps & Memory Pins</h2>
-              <p className="text-xs text-slate-400">Places we have explored together across cities, beaches, and mountain tops</p>
+              <h2 className="text-sm font-semibold text-text-1">Our Journey Footsteps & Memory Pins</h2>
+              <p className="text-xs text-text-2">Places we have explored together across cities, beaches, and mountain tops</p>
             </div>
-            <button className="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all shadow-md shadow-rose-600/30">
+            <button className="px-3.5 py-1.5 bg-accent-1 hover:opacity-90 text-white rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm">
               <MapPin className="w-3.5 h-3.5" />
               <span>Add New Journey Pin</span>
             </button>
@@ -386,25 +386,25 @@ export default function AnniversaryRecapPage() {
                 key={pin.id}
                 className={`p-5 rounded-2xl border transition-all ${
                   pin.isBucketList
-                    ? 'bg-[#120B18]/40 border-dashed border-rose-500/40'
-                    : 'bg-[#120B18]/70 border-rose-950/60'
+                    ? 'glass-card bg-card/60 border-dashed border-accent-2/40'
+                    : 'glass-card bg-card border-border/70 shadow-card'
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <MapPin className={`w-4 h-4 ${pin.isBucketList ? 'text-cyan-400' : 'text-rose-400'}`} />
-                    <h3 className="font-bold text-white text-sm">{pin.place}</h3>
+                    <MapPin className={`w-4 h-4 ${pin.isBucketList ? 'text-accent-2' : 'text-accent-1'}`} />
+                    <h3 className="font-bold text-text-1 text-sm">{pin.place}</h3>
                   </div>
                   <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold ${
                     pin.isBucketList
-                      ? 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/30'
-                      : 'bg-rose-500/10 text-rose-300 border border-rose-500/30'
+                      ? 'bg-accent-2/10 text-accent-2 border border-accent-2/25'
+                      : 'bg-accent-1/10 text-accent-1 border border-accent-1/20'
                   }`}>
                     {pin.isBucketList ? 'Bucket List Target' : 'Visited'}
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-400 font-mono mb-2">{pin.country} - {pin.visitedDate}</div>
-                <p className="text-xs text-slate-300 leading-relaxed bg-[#09050C] p-3 rounded-xl border border-rose-950/30">
+                <div className="text-[11px] text-text-2 font-mono mb-2">{pin.country} - {pin.visitedDate}</div>
+                <p className="text-xs text-text-1 leading-relaxed bg-card/60 p-3 rounded-xl border border-border/50">
                   {pin.story}
                 </p>
               </div>

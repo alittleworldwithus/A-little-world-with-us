@@ -303,6 +303,16 @@
   --success: 53 121 74;
   --warning: 135 103 31;
   --error: 158 88 88;
+
+  /* NexusAppSwitcher compatibility aliases (--color-* → rgb(--*) mapping) */
+  --color-card: rgb(var(--card) / 0.92);
+  --color-text-1: rgb(var(--text-1));
+  --color-text-2: rgb(var(--text-2));
+  --color-accent-1: rgb(var(--accent-1));
+  --color-accent-2: rgb(var(--accent-2));
+  --color-border: rgb(var(--border) / 0.6);
+  --color-accent-1-soft: rgb(var(--accent-1) / 0.08);
+  --color-accent-1-border: rgb(var(--accent-1) / 0.22);
 }
 
 /* ===== PEACH CREAM THEME MODE ===== */
@@ -345,6 +355,14 @@
   --success: 47 127 63;
   --warning: 156 99 0;
   --error: 191 70 70;
+  --color-card: rgb(var(--card) / 0.92);
+  --color-text-1: rgb(var(--text-1));
+  --color-text-2: rgb(var(--text-2));
+  --color-accent-1: rgb(var(--accent-1));
+  --color-accent-2: rgb(var(--accent-2));
+  --color-border: rgb(var(--border) / 0.6);
+  --color-accent-1-soft: rgb(var(--accent-1) / 0.08);
+  --color-accent-1-border: rgb(var(--accent-1) / 0.22);
 }
 
 /* ===== MINT WHISPER THEME MODE ===== */
@@ -387,6 +405,14 @@
   --success: 33 127 81;
   --warning: 155 99 5;
   --error: 173 84 84;
+  --color-card: rgb(var(--card) / 0.92);
+  --color-text-1: rgb(var(--text-1));
+  --color-text-2: rgb(var(--text-2));
+  --color-accent-1: rgb(var(--accent-1));
+  --color-accent-2: rgb(var(--accent-2));
+  --color-border: rgb(var(--border) / 0.6);
+  --color-accent-1-soft: rgb(var(--accent-1) / 0.08);
+  --color-accent-1-border: rgb(var(--accent-1) / 0.22);
 }
 
 /* ===== OCEAN CALM THEME MODE ===== */
@@ -429,6 +455,14 @@
   --success: 18 121 139;
   --warning: 147 101 0;
   --error: 181 76 76;
+  --color-card: rgb(var(--card) / 0.92);
+  --color-text-1: rgb(var(--text-1));
+  --color-text-2: rgb(var(--text-2));
+  --color-accent-1: rgb(var(--accent-1));
+  --color-accent-2: rgb(var(--accent-2));
+  --color-border: rgb(var(--border) / 0.6);
+  --color-accent-1-soft: rgb(var(--accent-1) / 0.08);
+  --color-accent-1-border: rgb(var(--accent-1) / 0.22);
 }
 
 :root[data-theme-mode='monochrome'] {
@@ -470,6 +504,14 @@
   --success: 163 197 134;
   --warning: 230 184 74;
   --error: 217 112 112; /* Monochrome-specific error override */
+  --color-card: rgb(var(--card) / 0.92);
+  --color-text-1: rgb(var(--text-1));
+  --color-text-2: rgb(var(--text-2));
+  --color-accent-1: rgb(var(--accent-1));
+  --color-accent-2: rgb(var(--accent-2));
+  --color-border: rgb(var(--border) / 0.6);
+  --color-accent-1-soft: rgb(var(--accent-1) / 0.08);
+  --color-accent-1-border: rgb(var(--accent-1) / 0.22);
 }
 
 :root[data-theme-mode='monochrome'] .glass-input:focus {
